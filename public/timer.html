@@ -50,12 +50,38 @@
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
     transform: scale(1.05);
 }
+button {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    background: linear-gradient(135deg, #ff0083, #c600e2);
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
+/* 悬停效果 */
+button:hover {
+    background: linear-gradient(135deg, #c600e2, #ff0083);
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+}
+
+/* 按下时的效果 */
+button:active {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(2px);
+}
     </style>
 </head>
 <body>
     <h1 class="heading">Timer</h1>
     <div id="timer">00:00:00</div>
+    <button onclick="controlTimer('start')">start</button>
+    <button onclick="controlTimer('stop')">stop</button>
 
     <audio id="alarm" src="alarm.mp3" preload="auto"></audio>
     <script>
@@ -72,13 +98,23 @@
         }
 
         function playAlarmAndSpeak(message) {
+            const alarm = document.getElementById("alarm");
+            alarm.muted = true; // 设置为静音
             alarm.play();
+            alarm.muted = false; // 取消静音
             const utterance = new SpeechSynthesisUtterance(message);
             utterance.lang = 'ja-JP';
             speechSynthesis.speak(utterance);
         }
 
         function startTimer() {
+            const alarm = document.getElementById("alarm");
+        
+            // 手动播放并暂停音频，让浏览器认为已与音频交互过
+            alarm.play().then(() => {
+                alarm.pause();
+                alarm.currentTime = 0;
+            }).catch(error => console.error("播放失败:", error));
             if (interval) return; // 防止重复启动
 
             startTime = Date.now();
@@ -88,10 +124,10 @@
                 let elapsedTime = Math.floor((Date.now() - startTime) / 1000);
                 timerElement.innerText = formatTime(elapsedTime);
 
-                if (elapsedTime >= 25 * 60 && previousMinutes < 25) {
+                if (elapsedTime >= 1 * 60 && previousMinutes < 25) {
                     playAlarmAndSpeak("25分になりました");
                     previousMinutes = 25;
-                } else if (elapsedTime >= 30 * 60 && previousMinutes < 30) {
+                } else if (elapsedTime >= 2 * 60 && previousMinutes < 30) {
                     playAlarmAndSpeak("30分になりました");
                     previousMinutes = 30;
                 } else if (elapsedTime >= 35 * 60 && previousMinutes < 35) {
@@ -99,18 +135,30 @@
                 }
             }, 1000);
         }
-
-        // 监听 `localStorage` 变化
-        window.addEventListener('storage', (event) => {
-            if (event.key === 'startTimer' && event.newValue === 'true') {
-                startTimer();
-            }else if (event.newValue === 'false') {
-                clearInterval(interval);
-                interval = null;
-                localStorage.removeItem('startTimer');
-
-            }
-        });
+        function stopTimer() {
+            clearInterval(interval);
+            interval = null;
+        }
+        function controlTimer(action) {
+            const url = action === 'start' ? 'http://localhost:3000/start' : 'http://localhost:3000/stop';
+            fetch(url, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => console.log(data.message))
+                .catch(err => console.error('Error:', err));
+        }
+// 定期从服务器获取计时器状态
+setInterval(() => {
+            fetch('http://localhost:3000/status')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'running' && !interval) {
+                        startTimer();
+                    } else if (data.status === 'stopped' && interval) {
+                        stopTimer();
+                    }
+                })
+                .catch(err => console.error('Error fetching status:', err));
+        }, 2000); // 每2秒检查一次
 
     </script>
 </body>
