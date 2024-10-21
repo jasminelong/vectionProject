@@ -62,7 +62,7 @@ button:active {
 
     <script>
         function controlTimer(action) {
-            const url = action === 'start' ? 'http://localhost:3000/start' : 'http://localhost:3000/stop';
+            const url = action === 'start' ? 'https://extraordinary-rabanadas-222768.netlify.app/start' : 'https://extraordinary-rabanadas-222768.netlify.app/stop';
             fetch(url, { method: 'POST' })
                 .then(response => response.json())
                 .then(data => console.log(data.message))

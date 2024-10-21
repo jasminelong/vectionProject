@@ -140,7 +140,7 @@ button:active {
             interval = null;
         }
         function controlTimer(action) {
-            const url = action === 'start' ? 'http://localhost:3000/start' : 'http://localhost:3000/stop';
+            const url = action === 'start' ? 'https://extraordinary-rabanadas-222768.netlify.app/start' : 'https://extraordinary-rabanadas-222768.netlify.app/stop';
             fetch(url, { method: 'POST' })
                 .then(response => response.json())
                 .then(data => console.log(data.message))
@@ -148,7 +148,7 @@ button:active {
         }
 // 定期从服务器获取计时器状态
 setInterval(() => {
-            fetch('http://localhost:3000/status')
+            fetch('https://extraordinary-rabanadas-222768.netlify.app/status')
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'running' && !interval) {
