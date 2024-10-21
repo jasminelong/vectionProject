@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计时器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        #timer {
+            font-size: 20vw;
+            margin-top: 20px;
+            color: #ff0083;
+        }
+    </style>
+</head>
+<body>
+    <h1>Timer</h1>
+    <div id="timer">00:00:00</div>
+
+    <audio id="alarm" src="alarm.mp3" preload="auto"></audio>
+    <script>
+        let timerElement = document.getElementById("timer");
+        let alarm = document.getElementById("alarm");
+        let startTime;
+        let interval;
+
+        function formatTime(seconds) {
+            let hrs = Math.floor(seconds / 3600);
+            let mins = Math.floor((seconds % 3600) / 60);
+            let secs = seconds % 60;
+            return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function playAlarmAndSpeak(message) {
+            alarm.play();
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.lang = 'ja-JP';
+            speechSynthesis.speak(utterance);
+        }
+
+        function startTimer() {
+            if (interval) return; // 防止重复启动
+
+            startTime = Date.now();
+            let previousMinutes = 0;
+
+            interval = setInterval(() => {
+                let elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                timerElement.innerText = formatTime(elapsedTime);
+
+                if (elapsedTime >= 1 * 60 && previousMinutes < 25) {
+                    playAlarmAndSpeak("25分になりました");
+                    console.log("111111");
+                    previousMinutes = 25;
+                } else if (elapsedTime >= 2 * 60 && previousMinutes < 30) {
+                    playAlarmAndSpeak("30分になりました");
+                    previousMinutes = 30;
+                } else if (elapsedTime >= 3 * 60 && previousMinutes < 35) {
+                    playAlarmAndSpeak("35分になりました");
+                    clearInterval(interval);
+                }
+            }, 1000);
+        }
+
+        // 监听 `localStorage` 变化
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'startTimer' && event.newValue === 'true') {
+                startTimer();
+            }else if (event.newValue === 'false') {
+                clearInterval(interval);
+                interval = null;
+                localStorage.removeItem('startTimer');
+
+            }
+        });
+
+    </script>
+</body>
+</html>
