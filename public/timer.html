@@ -141,8 +141,10 @@ button:active {
         }
         function controlTimer(action) {
             const url = action === 'start' ? 'https://extraordinary-rabanadas-222768.netlify.app/start' : 'https://extraordinary-rabanadas-222768.netlify.app/stop';
-            fetch(url, { method: 'POST' })
-                .then(response => response.json())
+            fetch(url, { method: 'POST' ,    headers: {
+        'Accept': 'application/json'
+    }})
+                .then(response => response.text())
                 .then(data => console.log(data.message))
                 .catch(err => console.error('Error:', err));
         }
@@ -153,7 +155,7 @@ setInterval(() => {
         'Accept': 'application/json'
     }
 })
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(data => {
                     if (data.status === 'running' && !interval) {
                         startTimer();

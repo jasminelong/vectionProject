@@ -67,7 +67,7 @@ button:active {
             fetch(url, { method: 'POST',headers: {
         'Accept': 'application/json'
     } },)
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(data => console.log(data.message))
                 .catch(err => console.error('Error:', err));
         }
