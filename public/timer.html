@@ -148,7 +148,11 @@ button:active {
         }
 // 定期从服务器获取计时器状态
 setInterval(() => {
-            fetch('https://extraordinary-rabanadas-222768.netlify.app/status')
+            fetch('https://extraordinary-rabanadas-222768.netlify.app/status', {
+    headers: {
+        'Accept': 'application/json'
+    }
+})
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'running' && !interval) {

@@ -64,7 +64,9 @@ button:active {
         //https://extraordinary-rabanadas-222768.netlify.app/start
         function controlTimer(action) {
             const url = action === 'start' ? 'https://extraordinary-rabanadas-222768.netlify.app/start' : 'https://extraordinary-rabanadas-222768.netlify.app/stop';
-            fetch(url, { method: 'POST' })
+            fetch(url, { method: 'POST',headers: {
+        'Accept': 'application/json'
+    } },)
                 .then(response => response.json())
                 .then(data => console.log(data.message))
                 .catch(err => console.error('Error:', err));
