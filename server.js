@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const PORT = 3000;
+let timerState = 'stopped'; // 初始状态为 'stopped'
+
 
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
