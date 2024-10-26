@@ -124,10 +124,10 @@ button:active {
                 let elapsedTime = Math.floor((Date.now() - startTime) / 1000);
                 timerElement.innerText = formatTime(elapsedTime);
 
-                if (elapsedTime >= 1 * 60 && previousMinutes < 25) {
+                if (elapsedTime >= 25 * 60 && previousMinutes < 25) {
                     playAlarmAndSpeak("25分になりました");
                     previousMinutes = 25;
-                } else if (elapsedTime >= 2 * 60 && previousMinutes < 30) {
+                } else if (elapsedTime >= 30 * 60 && previousMinutes < 30) {
                     playAlarmAndSpeak("30分になりました");
                     previousMinutes = 30;
                 } else if (elapsedTime >= 35 * 60 && previousMinutes < 35) {
