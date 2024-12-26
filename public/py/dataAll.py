@@ -2,9 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load data from three CSV files (replace 'file_path_X.csv' with your actual file paths)
-file_paths = ['d:/vectionProject/public/ExperimentData/20241113_154414_luminanceMixture_cameraSpeed4_fps5_G_trialNumber1.csv',
-              'd:/vectionProject/public/ExperimentData/20241113_155123_luminanceMixture_cameraSpeed4_fps5_G_trialNumber2.csv',
-              'd:/vectionProject/public/ExperimentData/20241113_155817_luminanceMixture_cameraSpeed4_fps5_G_trialNumber3.csv']
+file_paths = ['D:/vectionProject/public/ExperimentData/20241113_154414_luminanceMixture_cameraSpeed4_fps5_G_trialNumber1.csv',
+              'D:/vectionProject/public/ExperimentData/20241113_155123_luminanceMixture_cameraSpeed4_fps5_G_trialNumber2.csv',
+              'D:/vectionProject/public/ExperimentData/20241113_155817_luminanceMixture_cameraSpeed4_fps5_G_trialNumber3.csv']
 first_occurrence_times = []
 total_durations_1 = []
 
