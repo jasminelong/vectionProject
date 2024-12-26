@@ -132,6 +132,7 @@ button:active {
                     previousMinutes = 30;
                 } else if (elapsedTime >= 35 * 60 && previousMinutes < 35) {
                     playAlarmAndSpeak("35分になりました");
+                    previousMinutes = 35;
                 }
             }, 1000);
         }
@@ -140,7 +141,7 @@ button:active {
             interval = null;
         }
         function controlTimer(action) {
-            const url = action === 'start' ? 'http://192.168.1.108:3000/start' : 'http://192.168.1.108:3000/stop';
+            const url = action === 'start' ? 'http://192.168.1.96:3000/start' : 'http://192.168.1.96:3000/stop';
             fetch(url, { method: 'POST' })
                 .then(response => response.json())
                 .then(data => console.log(data.message))
@@ -148,7 +149,7 @@ button:active {
         }
 // 定期从服务器获取计时器状态
 setInterval(() => {
-            fetch('http://192.168.1.108:3000/status')
+            fetch('http://192.168.1.96:3000/status')
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'running' && !interval) {
