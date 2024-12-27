@@ -84,178 +84,105 @@ luminance_mixture_paths = {
     ]
 }
 
-# Process the files to compute latent time and duration time for each participant
-participant_latent_times = {}
-participant_duration_times = {}
+# Function to calculate reoccurrence times for each participant
+def calculate_reoccurrence_times(file_paths):
+    participant_reoccurrence_times = {}
 
-for file_path in file_paths:
-    participant_name = file_path.split('_')[5]
-    if participant_name not in participant_latent_times:
-        participant_latent_times[participant_name] = []
-        participant_duration_times[participant_name] = []
-    
-    df = pd.read_csv(file_path)
-    time = df['Time'] / 1000  # Convert time to seconds
-    vection_response = df['Vection Response']
-    
-    # Calculate latent time: time of first occurrence of 1
-    if (vection_response == 1).any():
-        first_occurrence_index = vection_response[vection_response == 1].index[0]
-        latent_time = time[first_occurrence_index]
-    else:
-        latent_time = 'no'
-        duration_time = 0
-    
-    # Calculate duration time: total time where response is 1
-    if latent_time != 'no':
-        time_diff = time.diff().fillna(0)
-        duration_time = time_diff[vection_response == 1].sum()
-    
-    # Store the data
-    participant_latent_times[participant_name].append(latent_time)
-    participant_duration_times[participant_name].append(duration_time)
-
-# Calculate average latent time for each participant
-avg_latent_times = {
-    participant: np.mean([t for t in participant_latent_times[participant] if t != 'no']) if len([t for t in participant_latent_times[participant] if t != 'no']) > 0 else 'no'
-    for participant in participant_latent_times
-}
-avg_duration_times = {
-    participant: np.mean(participant_duration_times[participant])
-    for participant in participant_duration_times
-}
-combined_latent_time = np.mean([t for t in avg_latent_times.values() if t != 'no']) if len([t for t in avg_latent_times.values() if t != 'no']) > 0 else 'no'
-combined_duration_time = np.mean(list(avg_duration_times.values()))
-combined_latent_std = np.std([t for t in avg_latent_times.values() if t != 'no']) if len([t for t in avg_latent_times.values() if t != 'no']) > 1 else 0
-combined_duration_std = np.std(list(avg_duration_times.values()))
-
-# Process luminance mixture conditions
-luminance_latent_times = {}
-luminance_duration_times = {}
-luminance_latent_times_std = {}
-luminance_duration_times_std = {}
-
-for condition, paths in luminance_mixture_paths.items():
-    participant_latent_times = {}
-    participant_duration_times = {}
-    
-    for file_path in paths:
+    for file_path in file_paths:
+        # Extract participant identifier from file name (e.g., "_G_")
         participant_name = file_path.split('_')[5]
+
+        # Load the data
         df = pd.read_csv(file_path)
         time = df['Time'] / 1000  # Convert time to seconds
         vection_response = df['Vection Response']
-        
-        # Calculate latent time: time of first occurrence of 1
-        if (vection_response == 1).any():
-            first_occurrence_index = vection_response[vection_response == 1].index[0]
-            latent_time = time[first_occurrence_index]
-        else:
-            latent_time = 'no'
-            duration_time = 0
-        
-        # Calculate duration time: total time where response is 1
-        if latent_time != 'no':
-            time_diff = time.diff().fillna(0)
-            duration_time = time_diff[vection_response == 1].sum()
-        
-        if participant_name not in participant_latent_times:
-            participant_latent_times[participant_name] = []
-            participant_duration_times[participant_name] = []
-        
-        participant_latent_times[participant_name].append(latent_time)
-        participant_duration_times[participant_name].append(duration_time)
+
+        # Identify where Vection stops (1 → 0) and reoccurs (0 → 1)
+        stop_indexes = vection_response[(vection_response.shift(1) == 1) & (vection_response == 0)].index
+        reoccur_indexes = vection_response[(vection_response.shift(1) == 0) & (vection_response == 1)].index
+
+        # Calculate the time it takes for Vection to stop and reoccur
+        reoccurrence_times = []
+        for stop_index in stop_indexes:
+            reoccur_index = reoccur_indexes[reoccur_indexes > stop_index].min()  # Find the next occurrence after stop
+            if not np.isnan(reoccur_index):
+                reoccurrence_time = time[reoccur_index] - time[stop_index]
+                reoccurrence_times.append(reoccurrence_time)
+
+        # Store reoccurrence times by participant
+        if participant_name not in participant_reoccurrence_times:
+            participant_reoccurrence_times[participant_name] = []
+        participant_reoccurrence_times[participant_name].extend(reoccurrence_times)
+
+    # Calculate average reoccurrence time for each participant
+    avg_reoccurrence_times = {
+        participant: np.mean(times) if len(times) > 0 else np.nan
+        for participant, times in participant_reoccurrence_times.items()
+    }
+
+    return avg_reoccurrence_times
+
+# Calculate reoccurrence times for continuous and luminance mixture conditions
+continuous_avg_reoccurrence_times = calculate_reoccurrence_times(file_paths)
+luminance_avg_reoccurrence_times = {
+    condition: calculate_reoccurrence_times(paths)
+    for condition, paths in luminance_mixture_paths.items()
+}
+
+# Combine results into a dictionary for easier plotting
+combined_avg_reoccurrence_times = {'Continuous': continuous_avg_reoccurrence_times}
+combined_avg_reoccurrence_times.update(luminance_avg_reoccurrence_times)
+
+# Prepare data for plotting
+conditions = list(combined_avg_reoccurrence_times.keys())
+participants = set()
+for condition in combined_avg_reoccurrence_times.values():
+    participants.update(condition.keys())
+participants = sorted(participants)
+
+# Create a data structure to store the average times for each participant across conditions
+participant_data = {participant: [np.nan] * len(conditions) for participant in participants}
+
+for i, condition in enumerate(conditions):
+    for participant, avg_time in combined_avg_reoccurrence_times[condition].items():
+        if participant in participant_data:
+            participant_data[participant][i] = avg_time
+
+# Plotting the results
+fig, ax = plt.subplots(figsize=(12, 8))
+
+x_positions = range(len(conditions))
+for participant, avg_times in participant_data.items():
+    # Filter out NaN values for plotting (Matplotlib does not handle NaNs in plot)
+    valid_x = [x for x, y in zip(x_positions, avg_times) if not np.isnan(y)]
+    valid_y = [y for y in avg_times if not np.isnan(y)]
     
-    luminance_latent_times[condition] = [
-        np.mean([t for t in participant_latent_times[participant] if t != 'no']) if len([t for t in participant_latent_times[participant] if t != 'no']) > 0 else 'no'
-        for participant in participant_latent_times
-    ]
-    luminance_duration_times[condition] = [
-        np.mean(participant_duration_times[participant])
-        for participant in participant_duration_times
-    ]
-    # Calculate standard deviation
-    luminance_latent_times_std[condition] = [
-        np.std([t for t in participant_latent_times[participant] if t != 'no']) if len([t for t in participant_latent_times[participant] if t != 'no']) > 0 else 0
-        for participant in participant_latent_times
-    ]
-    luminance_duration_times_std[condition] = [
-        np.std(participant_duration_times[participant]) if len(participant_duration_times[participant]) > 0 else 0
-        for participant in participant_duration_times
-    ]
+    ax.plot(valid_x, valid_y, marker='o', label=f'Participant {participant}', alpha=0.7)
 
-# Plot latent times and duration times as scatter plots with error bars
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+# Adding labels, title, and legend
+ax.set_title('Average Time for Vection to Stop and Reoccur by Participant and Condition')
+ax.set_xticks(x_positions)
+ax.set_xticklabels(conditions)
+ax.set_xlabel('Condition')
+ax.set_ylabel('Average Reoccurrence Time (seconds)')
+ax.legend(title="Participants", bbox_to_anchor=(1.05, 1), loc='upper left')
+ax.grid(True)
 
-# Set colors for consistency with provided image
-scatter_color_1 = '#ea7d8a'  # Light red for participants
-scatter_color_2 = '#2a8190'  # Teal for conditions
-errorbar_color = '#08bcc8'  # Dark blue for error bars
-
-# Latent time scatter plot with error bars
-fps_labels = ['No Luminance Mixture\n(60 Frames Control)', 'Luminance Mixture\n(5 Frames)', 'Luminance Mixture\n(10 Frames)', 'Luminance Mixture\n(30 Frames)']
-x_positions = [10, 40, 70, 100]
-
-# Scatter points for each participant's average latent times
-ax1.scatter([x_positions[0]] * len(avg_latent_times), [t for t in avg_latent_times.values() if t != 'no'], color=scatter_color_1, alpha=0.8, label='', marker='o')
-for condition, x_pos in zip(luminance_mixture_paths.keys(), x_positions[1:]):
-    condition_latent_times = [t for t in luminance_latent_times[condition] if t != 'no']
-    if len(condition_latent_times) > 0:
-        x_offsets = np.linspace(-0.5, 0.5, len(condition_latent_times))
-        for i, offset in enumerate(x_offsets):
-            ax1.scatter(x_pos + offset, condition_latent_times[i], color=scatter_color_2, alpha=0.8, label='', marker='^', s=80)
-
-# Error bars for average latent time per condition
-all_latent_times_avg = [combined_latent_time] + [
-    np.mean([t for t in luminance_latent_times[condition] if t != 'no']) if len([t for t in luminance_latent_times[condition] if t != 'no']) > 0 else 'no'
-    for condition in luminance_mixture_paths.keys()
-]
-all_latent_std = [combined_latent_std] + [
-    np.std([t for t in luminance_latent_times[condition] if t != 'no']) if len([t for t in luminance_latent_times[condition] if t != 'no']) > 0 else 0
-    for condition in luminance_mixture_paths.keys()
-]
-ax1.errorbar(x_positions, all_latent_times_avg, yerr=all_latent_std, fmt='o-', color=errorbar_color, alpha=0.6, capsize=5, linewidth=2.5, label='')
-
-ax1.set_ylabel('Vection Latency (s)')
- 
-ax1.set_xticks(x_positions)
-ax1.set_xticklabels(fps_labels)
-ax1.grid(axis='y')
-
-# Duration time scatter plot with error bars
-# Scatter points for each participant's average duration times
-ax2.scatter([x_positions[0]] * len(avg_duration_times), list(avg_duration_times.values()), color=scatter_color_1, alpha=0.8, marker='o')
-for condition, x_pos in zip(luminance_mixture_paths.keys(), x_positions[1:]):
-    condition_duration_times = luminance_duration_times[condition]
-    if len(condition_duration_times) > 0:
-        x_offsets = np.linspace(-0.5, 0.5, len(condition_duration_times))
-        for i, offset in enumerate(x_offsets):
-            ax2.scatter(x_pos + offset, condition_duration_times[i], color=scatter_color_2, alpha=0.8, marker='^', s=80)
-
-# Error bars for average duration time per condition
-all_duration_times_avg = [combined_duration_time] + [
-    np.mean(luminance_duration_times[condition]) for condition in luminance_mixture_paths.keys()
-]
-all_duration_std = [combined_duration_std] + [
-    np.std(luminance_duration_times[condition]) if len(luminance_duration_times[condition]) > 0 else 0
-    for condition in luminance_mixture_paths.keys()
-]
-ax2.errorbar(x_positions, all_duration_times_avg, yerr=all_duration_std, fmt='o-', color=errorbar_color, alpha=0.6, capsize=5, linewidth=2.5)
-
-ax2.set_ylabel('Vection Duration (s)')
- 
-ax2.set_xticks(x_positions)
-ax2.set_xticklabels(fps_labels)
-ax2.grid(axis='y')
-
-# Add thick horizontal lines at 0 and 180 seconds
-ax1.axhline(0, color='black', linewidth=1)
-ax1.axhline(180, color='black', linewidth=1)
-ax1.set_yticks([0, 60, 120, 180])
-
-ax2.axhline(0, color='black', linewidth=1)
-ax2.axhline(180, color='black', linewidth=1)
-ax2.set_yticks([0, 60, 120, 180])
-
-# Show plot
 plt.tight_layout()
 plt.show()
+
+# Save results to CSV
+results_data = {
+    'Participant': [],
+    'Condition': [],
+    'Average Reoccurrence Time (s)': []
+}
+for condition, participant_times in combined_avg_reoccurrence_times.items():
+    for participant, avg_time in participant_times.items():
+        results_data['Participant'].append(participant)
+        results_data['Condition'].append(condition)
+        results_data['Average Reoccurrence Time (s)'].append(avg_time)
+
+results_df = pd.DataFrame(results_data)
+results_df.to_csv('Average_Reoccurrence_Time_by_Participant_and_Condition.csv', index=False)
+print("Results saved to 'Average_Reoccurrence_Time_by_Participant_and_Condition.csv'.")

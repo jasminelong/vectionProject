@@ -4,83 +4,83 @@ import numpy as np
 
 # File paths for different experimental conditions
 file_paths = [
-    'D:/unity/Vection/Assets/ExperimentData/20241105_180723_continuous_cameraSpeed4_fps60_I_trialNumber1.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241105_181512_continuous_cameraSpeed4_fps60_I_trialNumber2.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241105_182431_continuous_cameraSpeed4_fps60_I_trialNumber3.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241105_180723_continuous_cameraSpeed4_fps60_I_trialNumber1.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241105_181512_continuous_cameraSpeed4_fps60_I_trialNumber2.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241105_182431_continuous_cameraSpeed4_fps60_I_trialNumber3.csv',
 
-    'D:/unity/Vection/Assets/ExperimentData/20241106_151409_continuous_cameraSpeed4_fps60_O_trialNumber1.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241106_152000_continuous_cameraSpeed4_fps60_O_trialNumber2.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241106_152448_continuous_cameraSpeed4_fps60_O_trialNumber3.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241106_151409_continuous_cameraSpeed4_fps60_O_trialNumber1.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241106_152000_continuous_cameraSpeed4_fps60_O_trialNumber2.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241106_152448_continuous_cameraSpeed4_fps60_O_trialNumber3.csv',
 
-    'D:/unity/Vection/Assets/ExperimentData/20241113_150930_continuous_cameraSpeed4_fps60_G_trialNumber1.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241113_151635_continuous_cameraSpeed4_fps60_G_trialNumber2.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241113_152721_continuous_cameraSpeed4_fps60_G_trialNumber3.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_150930_continuous_cameraSpeed4_fps60_G_trialNumber1.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_151635_continuous_cameraSpeed4_fps60_G_trialNumber2.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_152721_continuous_cameraSpeed4_fps60_G_trialNumber3.csv',
 
-    'D:/unity/Vection/Assets/ExperimentData/20241118_161948_continuous_cameraSpeed4_fps60_K_trialNumber1.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241118_162422_continuous_cameraSpeed4_fps60_K_trialNumber2.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241118_162911_continuous_cameraSpeed4_fps60_K_trialNumber3.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_161948_continuous_cameraSpeed4_fps60_K_trialNumber1.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_162422_continuous_cameraSpeed4_fps60_K_trialNumber2.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_162911_continuous_cameraSpeed4_fps60_K_trialNumber3.csv',
 
-    'D:/unity/Vection/Assets/ExperimentData/20241118_143922_continuous_cameraSpeed4_fps60_Y_trialNumber1.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241118_144959_continuous_cameraSpeed4_fps60_Y_trialNumber2.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241118_145508_continuous_cameraSpeed4_fps60_Y_trialNumber3.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_143922_continuous_cameraSpeed4_fps60_Y_trialNumber1.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_144959_continuous_cameraSpeed4_fps60_Y_trialNumber2.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_145508_continuous_cameraSpeed4_fps60_Y_trialNumber3.csv',
 
-    'D:/unity/Vection/Assets/ExperimentData/20241122_170146_continuous_cameraSpeed4_fps60_A_trialNumber1.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241122_170704_continuous_cameraSpeed4_fps60_A_trialNumber2.csv',
-    'D:/unity/Vection/Assets/ExperimentData/20241122_171154_continuous_cameraSpeed4_fps60_A_trialNumber3.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_170146_continuous_cameraSpeed4_fps60_A_trialNumber1.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_170704_continuous_cameraSpeed4_fps60_A_trialNumber2.csv',
+    '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_171154_continuous_cameraSpeed4_fps60_A_trialNumber3.csv',
 ]
 
 luminance_mixture_paths = {
     '5 fps': [
-        'D:/unity/Vection/Assets/ExperimentData/20241113_154414_luminanceMixture_cameraSpeed4_fps5_G_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241113_155123_luminanceMixture_cameraSpeed4_fps5_G_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241113_155817_luminanceMixture_cameraSpeed4_fps5_G_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_154414_luminanceMixture_cameraSpeed4_fps5_G_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_155123_luminanceMixture_cameraSpeed4_fps5_G_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_155817_luminanceMixture_cameraSpeed4_fps5_G_trialNumber3.csv',
 
-        'D:/unity/Vection/Assets/ExperimentData/20241118_163429_luminanceMixture_cameraSpeed4_fps5_K_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_163949_luminanceMixture_cameraSpeed4_fps5_K_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_164408_luminanceMixture_cameraSpeed4_fps5_K_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_163429_luminanceMixture_cameraSpeed4_fps5_K_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_163949_luminanceMixture_cameraSpeed4_fps5_K_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_164408_luminanceMixture_cameraSpeed4_fps5_K_trialNumber3.csv',
 
-        'D:/unity/Vection/Assets/ExperimentData/20241118_150020_luminanceMixture_cameraSpeed4_fps5_Y_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_150543_luminanceMixture_cameraSpeed4_fps5_Y_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_151108_luminanceMixture_cameraSpeed4_fps5_Y_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_150020_luminanceMixture_cameraSpeed4_fps5_Y_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_150543_luminanceMixture_cameraSpeed4_fps5_Y_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_151108_luminanceMixture_cameraSpeed4_fps5_Y_trialNumber3.csv',
 
-        'D:/unity/Vection/Assets/ExperimentData/20241122_171609_luminanceMixture_cameraSpeed4_fps5_A_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241122_172016_luminanceMixture_cameraSpeed4_fps5_A_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241122_172417_luminanceMixture_cameraSpeed4_fps5_A_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_171609_luminanceMixture_cameraSpeed4_fps5_A_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_172016_luminanceMixture_cameraSpeed4_fps5_A_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_172417_luminanceMixture_cameraSpeed4_fps5_A_trialNumber3.csv',
     ],
     '10 fps': [
-        'D:/unity/Vection/Assets/ExperimentData/20241113_161351_luminanceMixture_cameraSpeed4_fps10_G_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241113_162151_luminanceMixture_cameraSpeed4_fps10_G_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241113_162914_luminanceMixture_cameraSpeed4_fps10_G_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_161351_luminanceMixture_cameraSpeed4_fps10_G_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_162151_luminanceMixture_cameraSpeed4_fps10_G_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_162914_luminanceMixture_cameraSpeed4_fps10_G_trialNumber3.csv',
 
-        'D:/unity/Vection/Assets/ExperimentData/20241118_165443_luminanceMixture_cameraSpeed4_fps10_K_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_170330_luminanceMixture_cameraSpeed4_fps10_K_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_171626_luminanceMixture_cameraSpeed4_fps10_K_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_165443_luminanceMixture_cameraSpeed4_fps10_K_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_170330_luminanceMixture_cameraSpeed4_fps10_K_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_171626_luminanceMixture_cameraSpeed4_fps10_K_trialNumber3.csv',
 
-        'D:/unity/Vection/Assets/ExperimentData/20241118_151809_luminanceMixture_cameraSpeed4_fps10_Y_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_152450_luminanceMixture_cameraSpeed4_fps10_Y_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_153346_luminanceMixture_cameraSpeed4_fps10_Y_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_151809_luminanceMixture_cameraSpeed4_fps10_Y_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_152450_luminanceMixture_cameraSpeed4_fps10_Y_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_153346_luminanceMixture_cameraSpeed4_fps10_Y_trialNumber3.csv',
 
-        'D:/unity/Vection/Assets/ExperimentData/20241122_173828_luminanceMixture_cameraSpeed4_fps10_A_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241122_174243_luminanceMixture_cameraSpeed4_fps10_A_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241122_174654_luminanceMixture_cameraSpeed4_fps10_A_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_173828_luminanceMixture_cameraSpeed4_fps10_A_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_174243_luminanceMixture_cameraSpeed4_fps10_A_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_174654_luminanceMixture_cameraSpeed4_fps10_A_trialNumber3.csv',
         
     ],
     '30 fps': [
-        'D:/unity/Vection/Assets/ExperimentData/20241113_163839_luminanceMixture_cameraSpeed4_fps30_G_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241113_164516_luminanceMixture_cameraSpeed4_fps30_G_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241113_165322_luminanceMixture_cameraSpeed4_fps30_G_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_163839_luminanceMixture_cameraSpeed4_fps30_G_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_164516_luminanceMixture_cameraSpeed4_fps30_G_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_165322_luminanceMixture_cameraSpeed4_fps30_G_trialNumber3.csv',
         
-        'D:/unity/Vection/Assets/ExperimentData/20241118_172549_luminanceMixture_cameraSpeed4_fps30_K_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_173417_luminanceMixture_cameraSpeed4_fps30_K_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_174225_luminanceMixture_cameraSpeed4_fps30_K_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_172549_luminanceMixture_cameraSpeed4_fps30_K_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_173417_luminanceMixture_cameraSpeed4_fps30_K_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_174225_luminanceMixture_cameraSpeed4_fps30_K_trialNumber3.csv',
 
-        'D:/unity/Vection/Assets/ExperimentData/20241118_154342_luminanceMixture_cameraSpeed4_fps30_Y_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_155057_luminanceMixture_cameraSpeed4_fps30_Y_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241118_160156_luminanceMixture_cameraSpeed4_fps30_Y_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_154342_luminanceMixture_cameraSpeed4_fps30_Y_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_155057_luminanceMixture_cameraSpeed4_fps30_Y_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241118_160156_luminanceMixture_cameraSpeed4_fps30_Y_trialNumber3.csv',
 
-        'D:/unity/Vection/Assets/ExperimentData/20241122_175110_luminanceMixture_cameraSpeed4_fps30_A_trialNumber1.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241122_180111_luminanceMixture_cameraSpeed4_fps30_A_trialNumber2.csv',
-        'D:/unity/Vection/Assets/ExperimentData/20241122_180524_luminanceMixture_cameraSpeed4_fps30_A_trialNumber3.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_175110_luminanceMixture_cameraSpeed4_fps30_A_trialNumber1.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_180111_luminanceMixture_cameraSpeed4_fps30_A_trialNumber2.csv',
+        '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241122_180524_luminanceMixture_cameraSpeed4_fps30_A_trialNumber3.csv',
     ]
 }
 
