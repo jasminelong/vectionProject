@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the CSV file into a DataFrame
-file_path = '../ExperimentData/20241113_150930_continuous_cameraSpeed4_fps60_G_trialNumber1.csv'  # 请替换为你的实际文件路径
+file_path = '/Users/jasmine/Documents/GitHub/vectionProject/ExperimentData/20241113_150930_continuous_cameraSpeed4_fps60_G_trialNumber1.csv'  # 请替换为你的实际文件路径
 df = pd.read_csv(file_path)
 print(df);
 # Extract 'Time' and 'Vection Response' columns
