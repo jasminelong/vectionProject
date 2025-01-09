@@ -4,32 +4,6 @@ import numpy as np
 
 simulated_data ={
  
-"Dots_forward" :{
-    '5 fps':[
-        'D:/vectionProject/public/ExperimentData/20250109_054935_Dots_forward_luminanceMixture_cameraSpeed4_fps5_A_trialNumber2.csv',
-        'D:/vectionProject/public/ExperimentData/20250109_055113_Dots_forward_luminanceMixture_cameraSpeed4_fps5_A_trialNumber3.csv',
-    ],
-    '10 fps':[
-        'D:/vectionProject/public/ExperimentData/20250109_070204_Dots_forward_luminanceMixture_cameraSpeed4_fps10_A_trialNumber1.csv',
-        'D:/vectionProject/public/ExperimentData/20250108_190359_Dots_forward_luminanceMixture_cameraSpeed4_fps10_A_trialNumber2.csv',
-        'D:/vectionProject/public/ExperimentData/20250109_070326_Dots_forward_luminanceMixture_cameraSpeed4_fps10_A_trialNumber3.csv',
-    ],
-    '20 fps':[
-        'D:/vectionProject/public/ExperimentData/20250109_070455_Dots_forward_luminanceMixture_cameraSpeed4_fps20_A_trialNumber1.csv',
-        'D:/vectionProject/public/ExperimentData/20250109_070616_Dots_forward_luminanceMixture_cameraSpeed4_fps20_A_trialNumber2.csv',
-        'D:/vectionProject/public/ExperimentData/20250109_070736_Dots_forward_luminanceMixture_cameraSpeed4_fps20_A_trialNumber3.csv',
-    ],
-    '30 fps':[
-        'D:/vectionProject/public/ExperimentData/20250108_193052_Dots_forward_luminanceMixture_cameraSpeed4_fps30_A_trialNumber1.csv',
-        'D:/vectionProject/public/ExperimentData/20250109_071117_Dots_forward_luminanceMixture_cameraSpeed4_fps30_A_trialNumber2.csv',
-        'D:/vectionProject/public/ExperimentData/20250109_070954_Dots_forward_luminanceMixture_cameraSpeed4_fps30_A_trialNumber3.csv',
-    ],   
-    '60 fps':[
-        'D:/vectionProject/public/ExperimentData/20250109_071410_Dots_forward_continuous_cameraSpeed4_fps60_A_trialNumber1.csv',
-        'D:/vectionProject/public/ExperimentData/20250109_071248_Dots_forward_continuous_cameraSpeed4_fps60_A_trialNumber2.csv',
-        'D:/vectionProject/public/ExperimentData/20250108_193435_Dots_forward_continuous_cameraSpeed4_fps60_A_trialNumber3.csv',
-    ], 
-},
 "Natural_right" :{
     '5 fps':[
         'D:/vectionProject/public/ExperimentData/20250109_050301_Natural_right_luminanceMixture_cameraSpeed4_fps5_A_trialNumber1.csv',
@@ -42,9 +16,9 @@ simulated_data ={
         'D:/vectionProject/public/ExperimentData/20250109_052301_Natural_right_luminanceMixture_cameraSpeed4_fps10_A_trialNumber3.csv',
     ],
     '20 fps':[
-        'D:/vectionProject/public/ExperimentData/20250109_051936_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber1.csv',
-        'D:/vectionProject/public/ExperimentData/20250109_051758_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber2.csv',
-        'D:/vectionProject/public/ExperimentData/20250109_051627_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber3.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_124644_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_124815_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_124946_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber3.csv',
     ],
     '30 fps':[
         'D:/vectionProject/public/ExperimentData/20250108_192853_Natural_right_luminanceMixture_cameraSpeed4_fps30_A_trialNumber1.csv',
@@ -69,9 +43,9 @@ simulated_data ={
         'D:/vectionProject/public/ExperimentData/20250109_054454_Natural_forward_luminanceMixture_cameraSpeed4_fps10_A_trialNumber2.csv',
     ],
     '20 fps':[
-        'D:/vectionProject/public/ExperimentData/20250108_202811_Natural_forward_luminanceMixture_cameraSpeed4_fps20_A_trialNumber1.csv',
-        'D:/vectionProject/public/ExperimentData/20250109_050504_Natural_forward_luminanceMixture_cameraSpeed4_fps20_A_trialNumber2.csv',
-        'D:/vectionProject/public/ExperimentData/20250109_051448_Natural_forward_luminanceMixture_cameraSpeed4_fps20_A_trialNumber3.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_124158_Natural_forward_luminanceMixture_cameraSpeed4_fps20_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_124329_Natural_forward_luminanceMixture_cameraSpeed4_fps20_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_124500_Natural_forward_luminanceMixture_cameraSpeed4_fps20_A_trialNumber3.csv',
     ],
     '30 fps':[
         'D:/vectionProject/public/ExperimentData/20250109_053832_Natural_forward_luminanceMixture_cameraSpeed4_fps30_A_trialNumber1.csv',
@@ -135,20 +109,22 @@ print(duration_times)
 # Prepare data for plotting
 fps_values = ['5 fps', '10 fps', '20 fps', '30 fps', '60 fps']
 
-dots_forward = [duration_times['Dots_forward'][fps][0] for fps in fps_values]
+#dots_right= [duration_times['Dots_right'][fps][0] for fps in fps_values]
+#dots_forward = [duration_times['Dots_forward'][fps][0] for fps in fps_values]
 natural_right = [duration_times['Natural_right'][fps][0] for fps in fps_values]
 natural_forward = [duration_times['Natural_forward'][fps][0] for fps in fps_values]
 
 # Plot the data
 plt.figure(figsize=(10, 6))
-plt.plot(fps_values, dots_forward, marker='o', label='Dots Forward')
+#plt.plot(fps_values, dots_right, marker='o', label='Dots Right')
+#plt.plot(fps_values, dots_forward, marker='o', label='Dots Forward')
 plt.plot(fps_values, natural_right, marker='o', label='Natural Right')
 plt.plot(fps_values, natural_forward, marker='o', label='Natural Forward')
 
 plt.title('Vection Response Time by FPS')
 plt.xlabel('')
 plt.ylabel('Total Vection Time (s)')
-custom_labels = ['Luminance Mixture(5 FPS)', 'LM(10 FPS)', 'LM(20 FPS)', 'LM(30 FPS)', 'No Luminance Mixture\n(60 FPS)']  # Custom labels for x-axis
+custom_labels = ['LM(5 FPS)', 'LM(10 FPS)', 'LM(20 FPS)', 'LM(30 FPS)', 'No Luminance Mixture\n(60 FPS)']  # Custom labels for x-axis
 plt.xticks(ticks=range(len(fps_values)), labels=custom_labels)  # Set custom x-axis tick labels
 plt.legend()
 plt.grid(True)
