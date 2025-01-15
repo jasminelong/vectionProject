@@ -3,7 +3,61 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 simulated_data ={
- 
+"Dots_forward" :{
+    '5 fps':[
+        'D:/vectionProject/public/ExperimentData/20250109_050301_Natural_right_luminanceMixture_cameraSpeed4_fps5_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_050122_Natural_right_luminanceMixture_cameraSpeed4_fps5_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_045745_Natural_right_luminanceMixture_cameraSpeed4_fps5_A_trialNumber3.csv',
+        
+    ],
+    '10 fps':[
+        'D:/vectionProject/public/ExperimentData/20250109_052116_Natural_right_luminanceMixture_cameraSpeed4_fps10_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250108_190200_Natural_right_luminanceMixture_cameraSpeed4_fps10_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_052301_Natural_right_luminanceMixture_cameraSpeed4_fps10_A_trialNumber3.csv',
+    ],
+    '20 fps':[
+        'D:/vectionProject/public/ExperimentData/20250109_124644_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_124815_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_124946_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber3.csv',
+    ],
+    '30 fps':[
+        'D:/vectionProject/public/ExperimentData/20250108_192853_Natural_right_luminanceMixture_cameraSpeed4_fps30_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_052608_Natural_right_luminanceMixture_cameraSpeed4_fps30_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_052438_Natural_right_luminanceMixture_cameraSpeed4_fps30_A_trialNumber3.csv',
+    ],   
+    '60 fps':[
+        'D:/vectionProject/public/ExperimentData/20250109_052750_Natural_right_continuous_cameraSpeed4_fps60_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_052920_Natural_right_continuous_cameraSpeed4_fps60_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_053053_Natural_right_continuous_cameraSpeed4_fps60_A_trialNumber3.csv',
+    ], 
+},
+"Dots_right" :{
+    '5 fps':[
+        'D:/vectionProject/public/ExperimentData/20250109_050301_Natural_right_luminanceMixture_cameraSpeed4_fps5_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_050122_Natural_right_luminanceMixture_cameraSpeed4_fps5_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_045745_Natural_right_luminanceMixture_cameraSpeed4_fps5_A_trialNumber3.csv',
+    ],
+    '10 fps':[
+        'D:/vectionProject/public/ExperimentData/20250109_052116_Natural_right_luminanceMixture_cameraSpeed4_fps10_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250108_190200_Natural_right_luminanceMixture_cameraSpeed4_fps10_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_052301_Natural_right_luminanceMixture_cameraSpeed4_fps10_A_trialNumber3.csv',
+    ],
+    '20 fps':[
+        'D:/vectionProject/public/ExperimentData/20250109_124644_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_124815_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_124946_Natural_right_luminanceMixture_cameraSpeed4_fps20_A_trialNumber3.csv',
+    ],
+    '30 fps':[
+        'D:/vectionProject/public/ExperimentData/20250108_192853_Natural_right_luminanceMixture_cameraSpeed4_fps30_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_052608_Natural_right_luminanceMixture_cameraSpeed4_fps30_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_052438_Natural_right_luminanceMixture_cameraSpeed4_fps30_A_trialNumber3.csv',
+    ],   
+    '60 fps':[
+        'D:/vectionProject/public/ExperimentData/20250109_052750_Natural_right_continuous_cameraSpeed4_fps60_A_trialNumber1.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_052920_Natural_right_continuous_cameraSpeed4_fps60_A_trialNumber2.csv',
+        'D:/vectionProject/public/ExperimentData/20250109_053053_Natural_right_continuous_cameraSpeed4_fps60_A_trialNumber3.csv',
+    ], 
+}, 
 "Natural_right" :{
     '5 fps':[
         'D:/vectionProject/public/ExperimentData/20250109_050301_Natural_right_luminanceMixture_cameraSpeed4_fps5_A_trialNumber1.csv',
