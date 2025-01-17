@@ -1,11 +1,42 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import json
-from pathlib import Path
 
-with open('/Users/jasmine/Documents/GitHub/vectionProject/public/data/A.json', 'r', encoding='utf-8') as file:
+
+# 定义分类结构
+# categories = {
+#     "Dots_forward": {"fps5": [], "fps10": [], "fps20": [], "fps30": [], "fps60": []},
+#     "Dots_right": {"fps5": [], "fps10": [], "fps20": [], "fps30": [], "fps60": []},
+#     "Natural_right": {"fps5": [], "fps10": [], "fps20": [], "fps30": [], "fps60": []},
+#     "Natural_forward": {"fps5": [], "fps10": [], "fps20": [], "fps30": [], "fps60": []},
+# }
+
+# 读取现有的A.json文件内容
+with open('../data/A.json', 'r', encoding='utf-8') as file:
     simulated_data = json.load(file)
+
+# 定义文件夹路径
+folder_path = "../ExperimentData/"  # 替换为你的文件夹路径
+
+# # 遍历文件夹中的文件
+# for file_name in os.listdir(folder_path):
+#     if file_name.endswith(".csv"):
+#         # 根据文件名提取分类信息
+#         parts = file_name.split("_")
+#         if len(parts) >= 7:
+#             category = parts[2] + "_" + parts[3]  # 提取 "Dots_forward", "Dots_right", 等类别
+#             fps = parts[6]  # 提取 "30 fps", "60 fps", 等
+            
+#             # 将文件路径添加到对应类别中
+#             if category in simulated_data and fps in simulated_data[category]:
+#                 simulated_data[category][fps].append(folder_path+file_name)
+            
+# # 将分类结果保存到A.json文件中
+# with open('public/data/A.json', 'w', encoding='utf-8') as file:
+#     json.dump(simulated_data, file, indent=4)
+
 
 latent_times = {}
 duration_times = {}
@@ -32,8 +63,8 @@ for condition, data in simulated_data.items():
             filtered_vection = vection_response[mask]
             filtered_time = time[mask]
             # Calculate latent time
-            if (vection_response == 1).any():
-                first_occurrence_index = filtered_vection[vection_response == 1].index[0]
+            if (filtered_vection == 1).any():
+                first_occurrence_index = filtered_vection[filtered_vection == 1].index[0]
                 latent_time = filtered_time[first_occurrence_index]
             else:
                 latent_time = np.nan
@@ -46,29 +77,29 @@ for condition, data in simulated_data.items():
             participant_duration_times[participant_name].append(duration_time)
         
         # Store average values for each condition
-        luminance_latent_times[xcondition] = [
-            np.nanmean(participant_latent_times[p]) for p in participant_latent_times
-        ]
+        # luminance_latent_times[xcondition] = [
+        #     np.nanmean(participant_latent_times[p]) for p in participant_latent_times
+        # ]
         luminance_duration_times[xcondition] = [
             np.mean(participant_duration_times[p]) for p in participant_duration_times
         ]
 
-    latent_times[condition] = luminance_latent_times
+    # latent_times[condition] = luminance_latent_times
     duration_times[condition] = luminance_duration_times
 
 print(duration_times)
 
 # Prepare data for plotting
-fps_values = ['5 fps', '10 fps', '30 fps', '60 fps']
+fps_values = ['fps5', 'fps10', 'fps30', 'fps60']
 
-dots_right= [latent_times['Dots_right'][fps][0] for fps in fps_values]
-dots_forward = [latent_times['Dots_forward'][fps][0] for fps in fps_values]
-natural_right = [latent_times['Natural_right'][fps][0] for fps in fps_values]
-natural_forward = [latent_times['Natural_forward'][fps][0] for fps in fps_values]
-#dots_right= [duration_times['Dots_right'][fps][0] for fps in fps_values]
-#dots_forward = [duration_times['Dots_forward'][fps][0] for fps in fps_values]
-#natural_right = [duration_times['Natural_right'][fps][0] for fps in fps_values]
-#natural_forward = [duration_times['Natural_forward'][fps][0] for fps in fps_values]
+# dots_right= [latent_times['Dots_right'][fps][0] for fps in fps_values]
+# dots_forward = [latent_times['Dots_forward'][fps][0] for fps in fps_values]
+# natural_right = [latent_times['Natural_right'][fps][0] for fps in fps_values]
+# natural_forward = [latent_times['Natural_forward'][fps][0] for fps in fps_values]
+dots_right= [duration_times['Dots_right'][fps][0] for fps in fps_values]
+dots_forward = [duration_times['Dots_forward'][fps][0] for fps in fps_values]
+natural_right = [duration_times['Natural_right'][fps][0] for fps in fps_values]
+natural_forward = [duration_times['Natural_forward'][fps][0] for fps in fps_values]
 
 # Plot the data
 plt.figure(figsize=(10, 6))
@@ -77,10 +108,10 @@ plt.plot(fps_values, dots_forward, marker='o', label='Dots Forward')
 plt.plot(fps_values, natural_right, marker='o', label='Natural Right')
 plt.plot(fps_values, natural_forward, marker='o', label='Natural Forward')
 
-plt.title('Vection Onset Latency Time by FPS')
-plt.ylabel('Vection Onset Latency Time (s)')
-#plt.title('Vection Duration Time by FPS')
-#plt.ylabel('Vection Duration Time (s)')
+# plt.title('Vection Onset Latency Time by FPS')
+# plt.ylabel('Vection Onset Latency Time (s)')
+plt.title('Vection Duration Time by FPS')
+plt.ylabel('Vection Duration Time (s)')
 plt.xlabel('')
 
 custom_labels = ['LM(5 FPS)', 'LM(10 FPS)', 'LM(30 FPS)', 'No Luminance Mixture\n(60 FPS)']  # Custom labels for x-axis
