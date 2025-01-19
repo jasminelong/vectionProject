@@ -1,8 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Load the CSV file into a DataFrame
-file_path = '/Users/jasmine/Documents/GitHub/vectionProject/public/ExperimentData/20241113_155123_luminanceMixture_cameraSpeed4_fps5_G_trialNumber2.csv'  # 请替换为你的实际文件路径
+# Load the CSV file into a DataFrame 
+
+file_path = '../ExperimentDataO/20250115_120508_Natural_right_luminanceMixture_cameraSpeed4_fps10_B_trialNumber3.csv'  # 请替换为你的实际文件路径
+# file_path = '../ExperimentData/20250117_155851_Natural_right_luminanceMixture_cameraSpeed4_fps10_C_trialNumber2.csv'  # 请替换为你的实际文件路径
+# file_path = '../ExperimentData/20250117_153628_Dots_right_luminanceMixture_cameraSpeed4_fps10_C_trialNumber1.csv'  # 请替换为你的实际文件路径
 df = pd.read_csv(file_path)
 
 # Extract data from the DataFrame

@@ -4,10 +4,9 @@ from collections import Counter
 
 # File paths for the three CSV files
 file_paths = [
-    '/Users/jasmine/Documents/GitHub/vectionProject/public/ExperimentData/20241113_161351_luminanceMixture_cameraSpeed4_fps10_G_trialNumber1.csv',
+    '../ExperimentDataO/20250115_111649_Dots_right_luminanceMixture_cameraSpeed4_fps10_B_trialNumber2.csv',
      
 ]
-
 # Initialize a dictionary to store the total counts for each FrondFrameLuminance value
 total_counts = {}
 total_occurrences = {}

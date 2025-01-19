@@ -34,7 +34,7 @@ folder_path = "../ExperimentData/"  # 替换为你的文件夹路径
 #                 simulated_data[category][fps].append(folder_path+file_name)
             
 # # 将分类结果保存到A.json文件中
-# with open('public/data/A.json', 'w', encoding='utf-8') as file:
+# with open('../data/A.json', 'w', encoding='utf-8') as file:
 #     json.dump(simulated_data, file, indent=4)
 
 
@@ -57,7 +57,7 @@ for condition, data in simulated_data.items():
             time = df['Time'] / 1000
             vection_response = df['Vection Response']
 
-            mask = (time >= 0) & (time <= 60000)
+            mask = (time >= 0) & (time <= 60)
 
                 # 应用掩码筛选数据
             filtered_vection = vection_response[mask]
@@ -85,31 +85,26 @@ for condition, data in simulated_data.items():
         ]
 
     # latent_times[condition] = luminance_latent_times
+    # print(luminance_duration_times)
+    for xcondition in luminance_duration_times:
+        luminance_duration_times[xcondition] = np.nanmean(luminance_duration_times[xcondition])
+    # print(luminance_duration_times)
     duration_times[condition] = luminance_duration_times
+
 
 print(duration_times)
 
 # Prepare data for plotting
 fps_values = ['fps5', 'fps10', 'fps30', 'fps60']
 
-# dots_right= [latent_times['Dots_right'][fps][0] for fps in fps_values]
-# dots_forward = [latent_times['Dots_forward'][fps][0] for fps in fps_values]
-# natural_right = [latent_times['Natural_right'][fps][0] for fps in fps_values]
-# natural_forward = [latent_times['Natural_forward'][fps][0] for fps in fps_values]
-dots_right= [duration_times['Dots_right'][fps][0] for fps in fps_values]
-dots_forward = [duration_times['Dots_forward'][fps][0] for fps in fps_values]
-natural_right = [duration_times['Natural_right'][fps][0] for fps in fps_values]
-natural_forward = [duration_times['Natural_forward'][fps][0] for fps in fps_values]
-
-# Plot the data
+ 
+# Plot the data without error bars
 plt.figure(figsize=(10, 6))
-plt.plot(fps_values, dots_right, marker='o', label='Dots Right')
-plt.plot(fps_values, dots_forward, marker='o', label='Dots Forward')
-plt.plot(fps_values, natural_right, marker='o', label='Natural Right')
-plt.plot(fps_values, natural_forward, marker='o', label='Natural Forward')
+plt.plot(fps_values, [duration_times['Dots_right'][fps] for fps in fps_values], marker='o', label='Dots Right')
+plt.plot(fps_values, [duration_times['Dots_forward'][fps] for fps in fps_values], marker='o', label='Dots Forward')
+plt.plot(fps_values, [duration_times['Natural_right'][fps] for fps in fps_values], marker='o', label='Natural Right')
+plt.plot(fps_values, [duration_times['Natural_forward'][fps] for fps in fps_values], marker='o', label='Natural Forward')
 
-# plt.title('Vection Onset Latency Time by FPS')
-# plt.ylabel('Vection Onset Latency Time (s)')
 plt.title('Vection Duration Time by FPS')
 plt.ylabel('Vection Duration Time (s)')
 plt.xlabel('')
