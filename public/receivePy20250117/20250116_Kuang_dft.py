@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 # 画像の読み込み（グレースケールで）
 image_path1 = "../py/image1.png"  # 1つ目の画像パスを指定
 image_path2 = "../py/image2.png"  # 2つ目の画像パスを指定
+image_path2 = "../py/image3.png"  # 2つ目の画像パスを指定
 
 image1 = cv2.imread(image_path1, cv2.IMREAD_GRAYSCALE)
 image2 = cv2.imread(image_path2, cv2.IMREAD_GRAYSCALE)
@@ -67,7 +68,7 @@ else:
     highlighted_phase_diff = np.ma.masked_where(~mask, highlighted_phase_diff)  # 範囲内を隠す
 
     # プロット
-    fig, axes = plt.subplots(4, 3, figsize=(15, 9))
+    fig, axes = plt.subplots(4, 4, figsize=(15, 9))
 
     # 1つ目の画像
     axes[0, 0].imshow(image1, cmap="gray")

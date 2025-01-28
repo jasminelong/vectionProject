@@ -30,6 +30,7 @@ def process_image(image_path):
 image_paths = [
     'image1.png',
     'image2.png',
+    'image3.png',
 ]
 
 # Process all images
@@ -37,7 +38,7 @@ processed_images = [process_image(path) for path in image_paths]
 
 # Check if all images were successfully processed
 if all(img[0] is not None for img in processed_images):
-    fig, axs = plt.subplots(2, 2, figsize=(15, 10))
+    fig, axs = plt.subplots(3, 3, figsize=(15, 10))
 
     # Plot each image and its Fourier Transform
     for i, (gray_img, fft_img) in enumerate(processed_images):

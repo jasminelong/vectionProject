@@ -100,10 +100,10 @@ fps_values = ['fps5', 'fps10', 'fps30', 'fps60']
  
 # Plot the data without error bars
 plt.figure(figsize=(10, 6))
-plt.plot(fps_values, [duration_times['Dots_right'][fps] for fps in fps_values], marker='o', label='Dots Right')
-plt.plot(fps_values, [duration_times['Dots_forward'][fps] for fps in fps_values], marker='o', label='Dots Forward')
+# plt.plot(fps_values, [duration_times['Dots_right'][fps] for fps in fps_values], marker='o', label='Dots Right')
+# plt.plot(fps_values, [duration_times['Dots_forward'][fps] for fps in fps_values], marker='o', label='Dots Forward')
 plt.plot(fps_values, [duration_times['Natural_right'][fps] for fps in fps_values], marker='o', label='Natural Right')
-plt.plot(fps_values, [duration_times['Natural_forward'][fps] for fps in fps_values], marker='o', label='Natural Forward')
+# plt.plot(fps_values, [duration_times['Natural_forward'][fps] for fps in fps_values], marker='o', label='Natural Forward')
 
 plt.title('Vection Duration Time by FPS')
 plt.ylabel('Vection Duration Time (s)')
