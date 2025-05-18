@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # Load the CSV file into a DataFrame 
 
-file_path = '../ExperimentData/20250117_161507_Dots_right_luminanceMixture_cameraSpeed4_fps10_C_trialNumber2.csv'  # 请替换为你的实际文件路径
+file_path = 'D:/vectionProject/public/ExperimentData/20250117_161507_Dots_right_luminanceMixture_cameraSpeed4_fps10_C_trialNumber2.csv'  # 请替换为你的实际文件路径
 # file_path = '../ExperimentData/20250117_155851_Natural_right_luminanceMixture_cameraSpeed4_fps10_C_trialNumber2.csv'  # 请替换为你的实际文件路径
 # file_path = '../ExperimentData/20250117_153628_Dots_right_luminanceMixture_cameraSpeed4_fps10_C_trialNumber1.csv'  # 请替换为你的实际文件路径
 df = pd.read_csv(file_path)
