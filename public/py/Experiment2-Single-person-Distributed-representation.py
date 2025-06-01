@@ -3,9 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 1. 读取 CSV 文件（修改为你的文件路径）
-file_paths = ["D:/vectionProject/public/Experiment2Data/20250516_155106_fps1_ParticipantName_H_TrialNumber_1.csv",
-             "D:/vectionProject/public/Experiment2Data/20250516_151858_fps1_ParticipantName_H_TrialNumber_2.csv",
-             "D:/vectionProject/public/Experiment2Data/20250516_152754_fps1_ParticipantName_H_TrialNumber_3.csv"]
+file_paths = [
+    "D:/vectionProject/public/Experiment2Data/20250529_143935_fps1_ParticipantName_N_TrialNumber_1.csv",
+        "D:/vectionProject/public/Experiment2Data/20250529_144201_fps1_ParticipantName_N_TrialNumber_2.csv",
+        "D:/vectionProject/public/Experiment2Data/20250529_145128_fps1_ParticipantName_N_TrialNumber_3.csv",
+             ]
 
 """ file_paths = ["D:/vectionProject/public/Experiment2Data/20250518_104530_fps1_ParticipantName_K_TrialNumber_1.csv",
              "D:/vectionProject/public/Experiment2Data/20250518_102850_fps1_ParticipantName_K_TrialNumber_2.csv",
