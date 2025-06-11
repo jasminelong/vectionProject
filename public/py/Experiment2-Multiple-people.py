@@ -40,7 +40,7 @@ for person, paths in files.items():
 
 overall_mean = np.mean(list(person_mean.values()), axis=0)
 overall_std  = np.std (list(person_mean.values()), axis=0)
-
+print("Overall Mean:", overall_mean)
 # === 3. 生成 v(t) 曲线及误差带 ===
 omega = 2 * np.pi          # 1 Hz
 t = np.linspace(0, 10, 2000)
