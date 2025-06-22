@@ -4,11 +4,11 @@ import os
 import csv
 
 # 视频路径 / 動画のパス
-video_path = 'D:/444/Gamma.mp4'
+video_path = 'D:/444/q2.mp4'
 cap = cv2.VideoCapture(video_path)
 
 # ROI 区域位置 / ROI（関心領域）の位置
-x, y, w, h = 420, 446, 40, 40  # 感兴趣区域 / 注目領域
+x, y, w, h = 420, 346, 40, 40  # 感兴趣区域 / 注目領域
 
 # 视频信息 / 動画情報の取得
 fps = cap.get(cv2.CAP_PROP_FPS)  # 帧率 / フレームレート
