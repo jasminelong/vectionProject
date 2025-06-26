@@ -3,10 +3,14 @@ import pandas as pd, numpy as np, matplotlib.pyplot as plt
 # ========== 1. 把你想分析的 CSV 路径放进来 ==========
 # 示例：仅 1 位参与者 H（3 次试验）
 files = {
+    # "K": [
+    #     "D:/vectionProject/public/Experiment2Data/20250601_190847_fps0.5_cameraSpeed1_ParticipantName_K_TrialNumber_1.csv",
+    #     "D:/vectionProject/public/Experiment2Data/20250601_191538_fps0.5_cameraSpeed1_ParticipantName_K_TrialNumber_1.csv",
+    #     "D:/vectionProject/public/Experiment2Data/20250601_191757_fps0.5_cameraSpeed1_ParticipantName_K_TrialNumber_1.csv",
+    # ],
     "K": [
-        "D:/vectionProject/public/Experiment2Data/20250601_190847_fps0.5_cameraSpeed1_ParticipantName_K_TrialNumber_1.csv",
-        "D:/vectionProject/public/Experiment2Data/20250601_191538_fps0.5_cameraSpeed1_ParticipantName_K_TrialNumber_1.csv",
-        "D:/vectionProject/public/Experiment2Data/20250601_191757_fps0.5_cameraSpeed1_ParticipantName_K_TrialNumber_1.csv",
+        "D:/vectionProject/public/BrightnessLinearData/20250626_192629_fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_K_TrialNumber_1.csv",
+        
     ],
 }
 # 如果之后有第二个人 K，再加一段即可
@@ -20,7 +24,12 @@ for idx, (person, paths) in enumerate(files.items()):
     vals = []
     for p in paths:
         df = pd.read_csv(p); df.columns = df.columns.str.strip()
-        vals.append([df[df["StepNumber"] == i]["Amplitude"].iloc[-1] for i in range(5)])
+        vals.append([
+            df[df["StepNumber"] == i]["Amplitude"].iloc[-1]
+            if not df[df["StepNumber"] == i]["Amplitude"].empty else 0
+            for i in range(5)
+        ])
+        # vals.append([df[df["StepNumber"] == i]["Amplitude"].iloc[-1] for i in range(5)])
     arr = np.array(vals)
     person_mean[person] = arr.mean(axis=0)
     person_sd[person]   = arr.std (axis=0)
@@ -30,8 +39,12 @@ def v_curve(par, t):
     V0, A1, A2, A3, A4 = par
     # ω = 2*np.pi
     ω = np.pi
-    return V0 + A1*np.sin(ω*t) + A2*np.cos(ω*t) + \
-           A3*np.sin(2*ω*t) + A4*np.cos(2*ω*t)
+    # return V0 + A1*np.sin(ω*t) + A2*np.cos(ω*t) + \
+    #        A3*np.sin(2*ω*t) + A4*np.cos(2*ω*t)
+    # return V0 + A1*np.sin(0.5*ω*t) + A2*np.cos(0.5*ω*t) + \
+    #        A3*np.sin(ω*t) + A4*np.cos(ω*t)
+    return V0 + A1*np.sin(ω*t  + A2)  + \
+        A3*np.sin(2*ω*t  + A4) 
 
 t = np.linspace(0, 10, 2000)
 
@@ -62,13 +75,14 @@ for idx, (person, mean_par) in enumerate(person_mean.items()):
     v_upper  = v_curve(mean_par + sd_par, t)
     v_lower  = v_curve(mean_par - sd_par, t)
 
-    ax2.plot(t, v_mean, color=col, label=f"mean")
-    ax2.fill_between(t, v_lower, v_upper, color=col, alpha=0.3, label="±1 SD")
+    ax2.plot(t, v_mean, color=col, label=f"")
+    ax2.fill_between(t, v_lower, v_upper, color=col, alpha=0.3, label="")
 
 ax2.set_xlabel("Time (s)"); ax2.set_ylabel("v(t)")
-ax2.set_xlim(0,3); ax2.set_ylim(-2,4)
+ax2.set_xlim(0,5); ax2.set_ylim(-2,4)
 title = "Single participant" if len(files)==1 else "Each participant"
-ax2.set_title(r"v(t)=V0+A1·sin(ωt)+A2·cos(ωt)+A3·sin(2ωt)+A4·cos(2ωt)")
+ax2.set_title(r"v(t)=V0+A1·sin(ωt + A2)+A3·sin(2ωt + A4)")
 ax2.grid(True); ax2.legend()
 
-plt.tight_layout(); plt.show()
+plt.tight_layout(); 
+plt.show()

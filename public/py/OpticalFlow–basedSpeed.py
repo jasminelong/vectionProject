@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Video path
-video_path = 'D:/video/6月22日 (1).mp4'
+video_path = 'D:/video/6月23日(3).mp4'
 
 # Open video
 cap = cv2.VideoCapture(video_path)
