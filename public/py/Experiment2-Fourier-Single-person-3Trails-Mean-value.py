@@ -9,9 +9,11 @@ files = {
     #     "D:/vectionProject/public/Experiment2Data/20250601_191757_fps0.5_cameraSpeed1_ParticipantName_K_TrialNumber_1.csv",
     # ],
     "K": [
-        "D:/vectionProject/public/BrightnessLinearData/20250626_192629_fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_K_TrialNumber_1.csv",
-        
+        "D:/vectionProject/public/BrightnessLinearData/20250630_165543_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_K_TrialNumber_1.csv",
+        "D:/vectionProject/public/BrightnessLinearData/20250630_171239_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_K_TrialNumber_1.csv",
+        "D:/vectionProject/public/BrightnessLinearData/20250630_171746_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_K_TrialNumber_1.csv",
     ],
+
 }
 # 如果之后有第二个人 K，再加一段即可
 
@@ -39,12 +41,11 @@ def v_curve(par, t):
     V0, A1, A2, A3, A4 = par
     # ω = 2*np.pi
     ω = np.pi
-    # return V0 + A1*np.sin(ω*t) + A2*np.cos(ω*t) + \
-    #        A3*np.sin(2*ω*t) + A4*np.cos(2*ω*t)
-    # return V0 + A1*np.sin(0.5*ω*t) + A2*np.cos(0.5*ω*t) + \
-    #        A3*np.sin(ω*t) + A4*np.cos(ω*t)
-    return V0 + A1*np.sin(ω*t  + A2)  + \
-        A3*np.sin(2*ω*t  + A4) 
+    return V0 + A1*np.sin(ω*t) + A2*np.cos(ω*t) + \
+           A3*np.sin(2*ω*t) + A4*np.cos(2*ω*t)
+
+    # return V0 + A1*np.sin(ω*t  + A2)  + \
+    #     A3*np.sin(2*ω*t  + A4) 
 
 t = np.linspace(0, 10, 2000)
 
