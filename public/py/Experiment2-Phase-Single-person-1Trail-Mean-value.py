@@ -21,7 +21,7 @@ param_names = ["V0", "A1", "φ1", "A2", "φ2"]
 # v(t) 函数
 def v_curve(par, t):
     V0, A1, φ1, A2, φ2 = par
-    ω = np.pi
+    ω = 2*np.pi
     return V0 + A1 * np.sin(ω * t + φ1) + A2 * np.sin(2 * ω * t + φ2)
 
 t = np.linspace(0, 10, 2000)

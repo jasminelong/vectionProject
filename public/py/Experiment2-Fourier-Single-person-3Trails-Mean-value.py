@@ -9,9 +9,9 @@ files = {
     #     "D:/vectionProject/public/Experiment2Data/20250601_191757_fps0.5_cameraSpeed1_ParticipantName_K_TrialNumber_1.csv",
     # ],
     "K": [
-        "D:/vectionProject/public/BrightnessLinearData/20250630_165543_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_K_TrialNumber_1.csv",
-        "D:/vectionProject/public/BrightnessLinearData/20250630_171239_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_K_TrialNumber_1.csv",
-        "D:/vectionProject/public/BrightnessLinearData/20250630_171746_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_K_TrialNumber_1.csv",
+        "D:/vectionProject/public/BrightnessLinearData/20250701_174206_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_KK_TrialNumber_1.csv",
+        "D:/vectionProject/public/BrightnessLinearData/20250701_174827_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_KK_TrialNumber_1.csv",
+        "D:/vectionProject/public/BrightnessLinearData/20250701_175243_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_KK_TrialNumber_1.csv",
     ],
 
 }
@@ -26,11 +26,18 @@ for idx, (person, paths) in enumerate(files.items()):
     vals = []
     for p in paths:
         df = pd.read_csv(p); df.columns = df.columns.str.strip()
-        vals.append([
+
+        # V0 从 StepNumber == 0 中的 Velocity 提取
+        v0_series = df[df["StepNumber"] == 0]["Velocity"]
+        V0 = v0_series.iloc[-1] if not v0_series.empty else 0
+
+        # A1 ~ A4 从 StepNumber == 1~4 中提取 Amplitude
+        Ai = [
             df[df["StepNumber"] == i]["Amplitude"].iloc[-1]
             if not df[df["StepNumber"] == i]["Amplitude"].empty else 0
-            for i in range(5)
-        ])
+            for i in range(1, 5)
+        ]
+        vals.append([V0] + Ai)
         # vals.append([df[df["StepNumber"] == i]["Amplitude"].iloc[-1] for i in range(5)])
     arr = np.array(vals)
     person_mean[person] = arr.mean(axis=0)
@@ -39,8 +46,7 @@ for idx, (person, paths) in enumerate(files.items()):
 # ========== 3. 曲线生成函数 ==========
 def v_curve(par, t):
     V0, A1, A2, A3, A4 = par
-    # ω = 2*np.pi
-    ω = np.pi
+    ω = 2*np.pi
     return V0 + A1*np.sin(ω*t) + A2*np.cos(ω*t) + \
            A3*np.sin(2*ω*t) + A4*np.cos(2*ω*t)
 
@@ -77,12 +83,20 @@ for idx, (person, mean_par) in enumerate(person_mean.items()):
     v_lower  = v_curve(mean_par - sd_par, t)
 
     ax2.plot(t, v_mean, color=col, label=f"")
+    # 参数文本框
+    param_names = ["V0", "A1", "A2", "A3", "A4"]
+    param_text = "\n".join([f"{name} = {val:.3f}" for name, val in zip(param_names, mean_par)])
+    ax2.text(0.02, 0.95 - idx * 0.25, param_text, transform=ax2.transAxes,
+            fontsize=9, verticalalignment='top',
+    bbox=dict(facecolor='white', alpha=0.75, edgecolor='gray'))
+    
     ax2.fill_between(t, v_lower, v_upper, color=col, alpha=0.3, label="")
 
 ax2.set_xlabel("Time (s)"); ax2.set_ylabel("v(t)")
 ax2.set_xlim(0,5); ax2.set_ylim(-2,4)
 title = "Single participant" if len(files)==1 else "Each participant"
-ax2.set_title(r"v(t)=V0+A1·sin(ωt + A2)+A3·sin(2ωt + A4)")
+# ax2.set_title(r"v(t)=V0+A1·sin(ωt + A2)+A3·sin(2ωt + A4)")
+ax2.set_title(r"v(t)=V0+A1·sin(ωt)+A2·cos(ωt)+A3·sin(2ωt)+A4·cos(2ωt)")
 ax2.grid(True); ax2.legend()
 
 plt.tight_layout(); 

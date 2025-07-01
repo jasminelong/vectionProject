@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # ========== 1. 读取单个 CSV 文件 ==========
-file_path = "D:/vectionProject/public/BrightnessLinearData/20250630_195606_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_K_TrialNumber_1.csv"
+file_path = "D:/vectionProject/public/BrightnessLinearData/20250701_174206_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_K_TrialNumber_1.csv"
 df = pd.read_csv(file_path)
 df.columns = df.columns.str.strip()
 
@@ -26,8 +26,10 @@ params = np.array([V0] + A_params)
 # ========== 3. 定义 v(t) 函数 ==========
 def v_curve(par, t):
     V0, A1, A2, A3, A4 = par
-    ω = np.pi
-    return V0 + A1*np.sin(ω*t + A2) + A3*np.sin(2*ω*t + A4)
+    ω = 2*np.pi
+    # return V0 + A1*np.sin(ω*t + A2) + A3*np.sin(2*ω*t + A4)
+    return V0 + A1*np.sin(ω*t) + A2*np.cos(ω*t) + \
+        A3*np.sin(2*ω*t) + A4*np.cos(2*ω*t)
 
 t = np.linspace(0, 10, 2000)
 
@@ -62,7 +64,8 @@ ax2.set_xlabel("Time (s)")
 ax2.set_ylabel("v(t)")
 ax2.set_xlim(0, 5)
 ax2.set_ylim(-2, 4)
-ax2.set_title(r"v(t) = V0 + A1·sin(ωt + A2) + A3·sin(2ωt + A4)")
+# ax2.set_title(r"v(t) = V0 + A1·sin(ωt + A2) + A3·sin(2ωt + A4)")
+ax2.set_title(r"v(t)=V0+A1·sin(ωt)+A2·cos(ωt)+A3·sin(2ωt)+A4·cos(2ωt)")
 ax2.grid(True)
 ax2.legend()
 
