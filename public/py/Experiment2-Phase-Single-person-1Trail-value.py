@@ -3,17 +3,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 加载新的文件
-file_path = "D:/vectionProject/public/BrightnessLinearData/20250626_200721_fps1_CameraSpeed1_ExperimentPattern_Phase_ParticipantName_K_TrialNumber_1.csv"
+file_path = "D:/vectionProject/public/BrightnessLinearData/20250701_194947_Fps1_CameraSpeed1_ExperimentPattern_Phase_ParticipantName_KK_TrialNumber_1.csv"
 df = pd.read_csv(file_path)
 df.columns = df.columns.str.strip()
 
 # 参数提取
 v0_series = df[df["StepNumber"] == 0]["Velocity"]
 V0 = v0_series.iloc[-1] if not v0_series.empty else 0
-A1 = df[df["StepNumber"] == 3]["Amplitude"].iloc[-1] if not df[df["StepNumber"] == 3].empty else 0
-φ1 = df[df["StepNumber"] == 4]["Amplitude"].iloc[-1] if not df[df["StepNumber"] == 4].empty else 0
-A2 = df[df["StepNumber"] == 7]["Amplitude"].iloc[-1] if not df[df["StepNumber"] == 7].empty else 0
-φ2 = df[df["StepNumber"] == 8]["Amplitude"].iloc[-1] if not df[df["StepNumber"] == 8].empty else 0
+A1 = df[df["StepNumber"] == 1]["Amplitude"].iloc[-1] if not df[df["StepNumber"] == 1].empty else 0
+φ1 = df[df["StepNumber"] == 2]["Amplitude"].iloc[-1] if not df[df["StepNumber"] == 2].empty else 0
+A2 = df[df["StepNumber"] == 3]["Amplitude"].iloc[-1] if not df[df["StepNumber"] == 3].empty else 0
+φ2 = df[df["StepNumber"] == 4]["Amplitude"].iloc[-1] if not df[df["StepNumber"] == 4].empty else 0
 
 params = np.array([V0, A1, φ1, A2, φ2])
 param_names = ["V0", "A1", "φ1", "A2", "φ2"]

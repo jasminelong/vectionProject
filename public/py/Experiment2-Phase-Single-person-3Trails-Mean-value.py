@@ -9,9 +9,9 @@ files = {
     #     "D:/vectionProject/public/Experiment2Data/20250601_191757_fps0.5_cameraSpeed1_ParticipantName_K_TrialNumber_1.csv",
     # ],
     "K": [
-        "D:/vectionProject/public/BrightnessLinearData/20250701_174206_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_KK_TrialNumber_1.csv",
-        "D:/vectionProject/public/BrightnessLinearData/20250701_174827_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_KK_TrialNumber_1.csv",
-        "D:/vectionProject/public/BrightnessLinearData/20250701_175243_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_KK_TrialNumber_1.csv",
+        "D:/vectionProject/public/BrightnessLinearData/20250701_200219_Fps1_CameraSpeed1_ExperimentPattern_Phase_ParticipantName_KK_TrialNumber_1.csv",
+        "D:/vectionProject/public/BrightnessLinearData/20250701_195604_Fps1_CameraSpeed1_ExperimentPattern_Phase_ParticipantName_KK_TrialNumber_1.csv",
+        "D:/vectionProject/public/BrightnessLinearData/20250701_194947_Fps1_CameraSpeed1_ExperimentPattern_Phase_ParticipantName_KK_TrialNumber_1.csv",
     ],
 
 }
@@ -47,8 +47,8 @@ for idx, (person, paths) in enumerate(files.items()):
 def v_curve(par, t):
     V0, A1, A2, A3, A4 = par
     ω = 2*np.pi
-    return V0 + A1*np.sin(ω*t) + A2*np.cos(ω*t) + \
-           A3*np.sin(2*ω*t) + A4*np.cos(2*ω*t)
+    return V0 + A1*np.sin(ω*t  + A2)  + \
+        A3*np.sin(2*ω*t  + A4) 
 
 t = np.linspace(0, 10, 2000)
 
@@ -81,7 +81,7 @@ for idx, (person, mean_par) in enumerate(person_mean.items()):
 
     ax2.plot(t, v_mean, color=col, label=f"")
     # 参数文本框
-    param_names = ["V0", "A1", "A2", "A3", "A4"]
+    param_names = ["V0", "A1", "φ1", "A3", "φ2"]
     param_text = "\n".join([f"{name} = {val:.3f}" for name, val in zip(param_names, mean_par)])
     ax2.text(0.02, 0.95 - idx * 0.25, param_text, transform=ax2.transAxes,
             fontsize=9, verticalalignment='top',
@@ -92,7 +92,7 @@ for idx, (person, mean_par) in enumerate(person_mean.items()):
 ax2.set_xlabel("Time (s)"); ax2.set_ylabel("v(t)")
 ax2.set_xlim(0,5); ax2.set_ylim(-2,4)
 title = "Single participant" if len(files)==1 else "Each participant"
-ax2.set_title(r"v(t)=V0+A1·sin(ωt)+A2·cos(ωt)+A3·sin(2ωt)+A4·cos(2ωt)")
+ax2.set_title(r"v(t)=V0+A1·sin(ωt + φ1)+A2·sin(2ωt + φ2)")
 ax2.grid(True); ax2.legend()
 
 plt.tight_layout(); 

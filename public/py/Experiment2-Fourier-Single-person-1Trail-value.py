@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # ========== 1. 读取单个 CSV 文件 ==========
-file_path = "D:/vectionProject/public/BrightnessLinearData/20250701_174206_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_K_TrialNumber_1.csv"
+file_path = "D:/vectionProject/public/BrightnessLinearData/20250701_175243_Fps1_CameraSpeed1_ExperimentPattern_Fourier_ParticipantName_KK_TrialNumber_1.csv"
 df = pd.read_csv(file_path)
 df.columns = df.columns.str.strip()
 
