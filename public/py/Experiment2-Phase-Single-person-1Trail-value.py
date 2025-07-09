@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 加载新的文件
-file_path = "D:/vectionProject/public/BrightnessLinearData/20250701_194947_Fps1_CameraSpeed1_ExperimentPattern_Phase_ParticipantName_KK_TrialNumber_1.csv"
+file_path = "D:/vectionProject/public/BrightnessLinearData/20250709_145729_Fps1_CameraSpeed1_ExperimentPattern_Phase_ParticipantName_KK_TrialNumber_1_BrightnessBlendMode_CosineOnly.csv"
 df = pd.read_csv(file_path)
 df.columns = df.columns.str.strip()
 
@@ -22,7 +22,7 @@ param_names = ["V0", "A1", "φ1", "A2", "φ2"]
 def v_curve(par, t):
     V0, A1, φ1, A2, φ2 = par
     ω = 2*np.pi
-    return V0 + A1 * np.sin(ω * t + φ1) + A2 * np.sin(2 * ω * t + φ2)
+    return V0 + A1 * np.sin(ω * t + φ1 + np.pi) + A2 * np.sin(2 * ω * t + φ2 + np.pi)
 
 t = np.linspace(0, 10, 2000)
 

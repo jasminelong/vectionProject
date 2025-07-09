@@ -28,7 +28,7 @@ def dynamic_blend(x, knob_value):
         return (1 - t) * acos_blend(x) + t * cosine_blend(x)
 
 # === Step 2: 加载 CSV 文件 & 获取最后一个 FunctionRatio 值 ===
-csv_path = "D:/vectionProject/public/BrightnessLinearData/20250709_143549_Fps1_CameraSpeed1_ExperimentPattern_FunctionMix_ParticipantName_KK_TrialNumber_1.csv"  # 替换为你自己的文件路径
+csv_path = "D:/vectionProject/public/BrightnessLinearData/20250709_183035_Fps1_CameraSpeed1_ExperimentPattern_FunctionMix_ParticipantName_L_TrialNumber_1.csv"  # 替换为你自己的文件路径
 df = pd.read_csv(csv_path)
 df.columns = df.columns.str.strip()
 function_ratio = df["FunctionRatio"].dropna().iloc[-1]
