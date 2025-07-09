@@ -4,9 +4,9 @@ import pandas as pd
 
 # 文件路径列表
 file_paths = [
-    ("D:/vectionProject/public/BrightnessLinearData/20250709_143549_Fps1_CameraSpeed1_ExperimentPattern_FunctionMix_ParticipantName_KK_TrialNumber_1.csv", "Trial 1"),
-    ("D:/vectionProject/public/BrightnessLinearData/20250709_143949_Fps1_CameraSpeed1_ExperimentPattern_FunctionMix_ParticipantName_KK_TrialNumber_2.csv", "Trial 2"),
-    ("D:/vectionProject/public/BrightnessLinearData/20250709_144327_Fps1_CameraSpeed1_ExperimentPattern_FunctionMix_ParticipantName_KK_TrialNumber_3.csv", "Trial 3")
+    ("D:/vectionProject/public/BrightnessData/20250709_143549_Fps1_CameraSpeed1_ExperimentPattern_FunctionMix_ParticipantName_KK_TrialNumber_1.csv", "Trial 1"),
+    ("D:/vectionProject/public/BrightnessData/20250709_143949_Fps1_CameraSpeed1_ExperimentPattern_FunctionMix_ParticipantName_KK_TrialNumber_2.csv", "Trial 2"),
+    ("D:/vectionProject/public/BrightnessData/20250709_144327_Fps1_CameraSpeed1_ExperimentPattern_FunctionMix_ParticipantName_KK_TrialNumber_3.csv", "Trial 3")
 ]
 
 # 定义基础函数
