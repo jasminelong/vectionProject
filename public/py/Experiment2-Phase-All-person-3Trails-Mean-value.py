@@ -10,7 +10,7 @@ from statistics import mean
 root_dir = "D:/vectionProject/public/BrightnessData"
 
 # 用正则匹配文件名中的模式
-pattern = re.compile(r"ExperimentPattern_Phase_ParticipantName_(\w+)_.*?_BrightnessBlendMode_(\w+)\.csv")
+pattern = re.compile(r"ExperimentPattern_Phase_ParticipantName_(\w+)_TrialNumber_.*?_BrightnessBlendMode_(\w+)\.csv")
 
 # 按实验者和模式收集文件路径（排除Test文件）
 participant_files = defaultdict(lambda: defaultdict(list))
@@ -31,7 +31,7 @@ def v_curve(par, t):
 # 遍历每位实验者绘图
 for participant, mode_files in participant_files.items():
     fig, axs = plt.subplots(2, 3, figsize=(15, 8))
-    plt.suptitle(f"Participant {participant}: Brightness & v(t) Average", fontsize=16)
+    plt.suptitle(f"Participant {participant}: Brightness & v(t) Average with SD", fontsize=16)
     t = np.linspace(0, 10, 2000)
 
     for i, mode in enumerate(["CosineOnly", "LinearOnly", "AcosOnly"]):
@@ -58,28 +58,45 @@ for participant, mode_files in participant_files.items():
             df.loc[mask, ["BackFrameLuminance", "FrondFrameLuminance"]] = df.loc[mask, ["FrondFrameLuminance", "BackFrameLuminance"]].to_numpy()
             luminance_data.append((time, df["FrondFrameLuminance"], df["BackFrameLuminance"]))
 
+        # 第一行图: 亮度曲线
         ax1 = axs[0, i]
         for time, front, back in luminance_data:
             ax1.plot(time, front, label="Front", alpha=0.7)
             ax1.plot(time, back, label="Back", alpha=0.7)
         ax1.set_title(f"Luminance - {mode}")
-        ax1.set_xlim(0, 10)
+        ax1.set_xlim(0, 3)
         ax1.set_ylabel("Luminance")
         ax1.grid(True)
 
+        # 第二行图: v(t)均值±SD
         ax2 = axs[1, i]
         if params_list:
-            avg_params = np.mean(params_list, axis=0)
-            v_vals = v_curve(avg_params, t)
-            ax2.plot(t, v_vals, label="v(t)", color="tab:blue")
-            param_text = "\n".join([f"{n}={v:.2f}" for n, v in zip(["V0", "A1", "φ1", "A2", "φ2"], avg_params)])
+            params_array = np.array(params_list)
+            avg_params = np.mean(params_array, axis=0)
+            std_params = np.std(params_array, axis=0)
+            
+             # 均值 v(t)
+            v_mean = v_curve(avg_params, t)
+            ax2.plot(t, v_mean, label="v(t)", color="tab:blue")
+
+             # ±SD 曲线
+            v_upper = v_curve(avg_params + std_params, t)
+            v_lower = v_curve(avg_params - std_params, t)
+            ax2.fill_between(t, v_lower, v_upper, color='tab:blue', alpha=0.2, label="±1 SD")
+
+            # 显示均值和SD数值
+            param_text = "\n".join([
+                f"{n}={m:.2f}±{s:.2f}" for n, m, s in zip(["V0", "A1", "φ1", "A2", "φ2"], avg_params, std_params)
+            ])
             ax2.text(0.02, 0.95, param_text, transform=ax2.transAxes, fontsize=10,
                      verticalalignment='top', bbox=dict(facecolor='white', alpha=0.8))
+            
             ax2.set_title(f"v(t) - {mode}")
-            ax2.set_xlim(0, 5)
+            ax2.set_xlim(0, 3)
             ax2.set_ylim(-2, 4)
             ax2.set_xlabel("Time (s)")
             ax2.set_ylabel("Velocity")
+            ax2.legend()
             ax2.grid(True)
 
     plt.tight_layout(rect=[0, 0, 1, 0.95])

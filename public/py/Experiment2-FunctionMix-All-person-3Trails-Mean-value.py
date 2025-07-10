@@ -7,6 +7,8 @@ from glob import glob
 from collections import defaultdict
 from statistics import mean
 from pathlib import Path
+import matplotlib.cm as cm  # 新增：导入 colormap
+import matplotlib.colors as mcolors
 
 # === 定义混合函数 ===
 def cosine_blend(x):
@@ -57,20 +59,27 @@ lin_vals = linear_blend(x_vals)
 acos_vals = acos_blend(x_vals)
 
 # === 每个被试者均值图 + 所有人的总均值图 ===
+participants = list(participant_data.keys())
+num_participants = len(participants)
+cmap = cm.get_cmap('tab10', num_participants)
+
 plt.figure(figsize=(10, 7))
 plt.plot(x_vals, cos_vals, '--', label="Cosine")
 plt.plot(x_vals, lin_vals, '--', label="Linear")
 plt.plot(x_vals, acos_vals, '--', label="Acos")
 
 all_ratios = []
+colors = plt.cm.tab10.colors  # 使用 Matplotlib 默认颜色表
 
-for participant, ratios in participant_data.items():
+for idx, (participant, ratios) in enumerate(participant_data.items()):
+    ratios = participant_data[participant]
     if len(ratios) == 0:
         continue
     mean_ratio = mean(ratios)
     dyn_vals = dynamic_blend(x_vals, mean_ratio)
     all_ratios.append(mean_ratio)
-    plt.plot(x_vals, dyn_vals, label=f"{participant} (mean={mean_ratio:.3f})")
+    color = colors[idx % len(colors)]
+    plt.plot(x_vals, dyn_vals, label=f"{participant} (mean={mean_ratio:.3f})", color=color)
 
 # 所有人平均
 if all_ratios:
