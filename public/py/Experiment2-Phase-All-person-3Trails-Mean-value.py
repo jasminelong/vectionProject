@@ -66,8 +66,8 @@ for participant, mode_files in participant_files.items():
         # 亮度曲线
         ax1 = axs[0, i]
         for time, front, back in luminance_data:
-            ax1.plot(time, front, alpha=0.7)
-            ax1.plot(time, back, alpha=0.7)
+            ax1.plot(time, front,color='tab:blue', alpha=0.7)
+            ax1.plot(time, back, color='tab:orange',alpha=0.7)
         ax1.set_title(f"Luminance - {mode}")
         ax1.set_xlim(0, 3)
         ax1.grid(True)
@@ -100,9 +100,36 @@ for participant, mode_files in participant_files.items():
     plt.show()
 
 # ======== 总体均值和SD图 ==========
-fig, axs = plt.subplots(2, 3, figsize=(15, 8))
+fig, axs = plt.subplots(3, 3, figsize=(15, 12))
 plt.suptitle("Overall Participants: Brightness & v(t) Average with SD", fontsize=16)
 
+# 第一行：辉度混合图（每个mode只取一个文件的辉度值即可）
+for i, mode in enumerate(["CosineOnly", "LinearOnly", "AcosOnly"]):
+    # 只取第一个文件
+    for participant, mode_files in participant_files.items():
+        files = mode_files.get(mode, [])
+        if files:
+            path = files[0]
+            df = pd.read_csv(path)
+            df.columns = df.columns.str.strip()
+            time = df["Time"] / 1000
+            mask = (time <= 10) & (df["BackFrameNum"] % 2 != 0)
+            df.loc[mask, ["BackFrameNum", "FrondFrameNum"]] = df.loc[mask, ["FrondFrameNum", "BackFrameNum"]].to_numpy()
+            df.loc[mask, ["BackFrameLuminance", "FrondFrameLuminance"]] = df.loc[mask, ["FrondFrameLuminance", "BackFrameLuminance"]].to_numpy()
+            time_plot = np.linspace(0, 3, 300)
+            front_interp = np.interp(time_plot, time, df["FrondFrameLuminance"])
+            back_interp = np.interp(time_plot, time, df["BackFrameLuminance"])
+            ax0 = axs[0, i]
+            ax0.plot(time_plot, front_interp, color='tab:blue')
+            ax0.plot(time_plot, back_interp, color='tab:orange')
+            ax0.set_xlim(0, 3)
+            ax0.set_title(f"Luminance Blend - {mode}")
+            ax0.set_ylabel("Luminance")
+            ax0.grid(True)
+            ax0.legend()
+            break  # 只取一个文件
+
+# 第二行：v(t) ± SD
 for i, mode in enumerate(["CosineOnly", "LinearOnly", "AcosOnly"]):
     all_params = np.array(overall_data[mode])
     if all_params.size == 0:
@@ -116,7 +143,7 @@ for i, mode in enumerate(["CosineOnly", "LinearOnly", "AcosOnly"]):
     v_upper = v_curve(overall_mean + overall_sd, t)
     v_lower = v_curve(overall_mean - overall_sd, t)
 
-    ax1 = axs[0, i]
+    ax1 = axs[1, i]
     ax1.plot(t, v_mean, color='black', label="Overall Mean v(t)")
     ax1.fill_between(t, v_lower, v_upper, color='gray', alpha=0.3, label="±1 SD")
     ax1.set_xlim(0, 3)
@@ -127,13 +154,23 @@ for i, mode in enumerate(["CosineOnly", "LinearOnly", "AcosOnly"]):
     ax1.grid(True)
     ax1.legend()
 
-    # 参数均值和SD条形图
-    ax2 = axs[1, i]
+    # 第三行：参数均值和SD条形图
+    ax2 = axs[2, i]
     names = ["V0", "A1", "φ1", "A2", "φ2"]
-    ax2.bar(names, overall_mean, yerr=overall_sd, capsize=5, color="lightblue")
+    bars = ax2.bar(names, overall_mean, yerr=overall_sd, capsize=5, color="lightblue")
     ax2.set_title(f"Overall Params - {mode}")
     ax2.set_ylim(min(overall_mean - overall_sd) - 0.5, max(overall_mean + overall_sd) + 0.5)
     ax2.grid(True, axis='y')
+    # 在每个柱子下方显示数值，避免与errorbar重叠
+    for idx, (bar, value) in enumerate(zip(bars, overall_mean)):
+        ax2.text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height() - overall_sd[idx] - 0.2,  # 柱子下方
+            f"{value:.2f}",
+            ha='center',
+            va='top',
+            fontsize=10
+        )
 
 plt.tight_layout(rect=[0, 0, 1, 0.95])
 plt.show()
