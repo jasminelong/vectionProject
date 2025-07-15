@@ -21,19 +21,16 @@ def acos_blend(x):
     return np.arccos(-2 * x + 1) / np.pi
 
 def dynamic_blend(x, knob_value):
-    if knob_value <= 0.1 or knob_value >= 1.9:
+    if knob_value <= 0.1:
         return cosine_blend(x)
-    
-    k = knob_value - 0.1
-    if k <= 0.6:
-        t = k / 0.6
+    elif knob_value <= 0.5:
+        t = (knob_value - 0.1) / 0.4
         return (1 - t) * cosine_blend(x) + t * linear_blend(x)
-    elif k <= 1.2:
-        t = (k - 0.6) / 0.6
+    elif knob_value <= 0.9:
+        t = (knob_value - 0.5) / 0.4
         return (1 - t) * linear_blend(x) + t * acos_blend(x)
     else:
-        t = (k - 1.2) / 0.6
-        return (1 - t) * acos_blend(x) + t * cosine_blend(x)
+        return acos_blend(x)
 
 # === 扫描文件夹中的文件 ===
 folder = Path("D:/vectionProject/public/BrightnessData")
