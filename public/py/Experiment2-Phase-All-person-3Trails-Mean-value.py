@@ -6,7 +6,7 @@ import re
 from collections import defaultdict
 
 # 根目录
-root_dir = "D:/vectionProject/public/BrightnessData"
+root_dir = "D:/vectionProject/public/BrightnessFunctionMixAndPhaseData"
 
 # 文件名匹配模式
 pattern = re.compile(r"ExperimentPattern_Phase_ParticipantName_(\w+)_TrialNumber_.*?_BrightnessBlendMode_(\w+)\.csv")
