@@ -8,14 +8,14 @@ Experiment 2 consisted of two parts: a 6-trial exploration phase to find optimal
 In the exploration phase, participants adjusted the brightness mixing ratio to minimize velocity fluctuations in the lower image. The median values from 6 trials for each participant were as follows:
 
 \item ONO: 0.633 (mean: 0.680, std: 0.158)
-\item LL: 0.192 (mean: 0.249, std: 0.177)
+\item LL: 0.218 (mean: 0.263, std: 0.172)
 \item HOU: 0.316 (mean: 0.378, std: 0.195)
-\item YAMA: 0.615 (mean: 0.644, std: 0.072)
 \item OMU: 0.734 (mean: 0.714, std: 0.123)
+\item YAMA: 0.615 (mean: 0.643, std: 0.072)
 
 \end{itemize}
 
-The exploration results show individual differences in preferred brightness mixing ratios, ranging from 0.192 to 0.734.
+The exploration results show individual differences in preferred brightness mixing ratios, ranging from 0.218 to 0.734.
 
 \subsubsection{Parameter Adjustment Phase Results}
 

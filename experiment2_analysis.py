@@ -388,13 +388,17 @@ def compare_experiments(exploration_results, phase_params):
     # 実験1と実験2のV0値を比較
     participants = list(exp2_v0_values.keys())
     
-    # 実験1のデータがある場合は実際の値を使用、ない場合は理論値
+    # 実験1の実際のデータを使用（被験者が異なるため、実験1の全被験者の平均値を使用）
     exp1_v0 = []
-    for p in participants:
-        if p in exp1_v0_values:
-            exp1_v0.append(exp1_v0_values[p])
-        else:
-            exp1_v0.append(2.0)  # 理論値
+    if exp1_v0_values:
+        # 実験1の全被験者の平均V0値を計算
+        exp1_mean_v0 = np.mean(list(exp1_v0_values.values()))
+        print(f"実験1の全被験者平均V0値: {exp1_mean_v0:.3f}")
+        exp1_v0 = [exp1_mean_v0] * len(participants)
+    else:
+        # 実験1のデータがない場合は理論値を使用
+        exp1_v0 = [2.0] * len(participants)
+        print("実験1のデータがないため、理論値2.0を使用")
     
     exp2_v0 = [exp2_v0_values[p] for p in participants]
     
