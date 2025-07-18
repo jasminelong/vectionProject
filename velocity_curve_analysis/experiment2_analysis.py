@@ -183,116 +183,39 @@ def plot_experiment2_results(exploration_results, phase_params):
     """実験2の結果を可視化"""
     print("\n=== 実験2結果の可視化 ===")
     
-    # 被験者名をA, B, C, D, Eに変更
-    original_participants = list(exploration_results.keys())
-    participant_mapping = {original: new for original, new in zip(original_participants, ['A', 'B', 'C', 'D', 'E'])}
-    
-    # 傾向に基づいて被験者を並び替え（3人が似た傾向、2人が似た傾向）
-    # 中央値でソートして、3人と2人のグループに分ける
-    sorted_participants = sorted(original_participants, key=lambda p: exploration_results[p]['median'])
-    
-    # 3人グループ（低い値）と2人グループ（高い値）に分ける
-    group1 = sorted_participants[:3]  # 低い値の3人
-    group2 = sorted_participants[3:]  # 高い値の2人
-    
-    # 新しい順序で被験者名を割り当て
-    reordered_participants = group1 + group2
-    new_participant_names = ['A', 'B', 'C', 'D', 'E']
-    participant_mapping = {original: new for original, new in zip(reordered_participants, new_participant_names)}
-    
-    # 図1: 探索実験の結果（一つの図に統合）
-    fig1, (ax_func, ax_main) = plt.subplots(1, 2, figsize=(15, 8), gridspec_kw={'width_ratios': [0.3, 0.7]})
+    # 図1: 探索実験の結果
+    fig1, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
     fig1.suptitle('Experiment 2 (Part 1): FunctionMix Exploration Results', fontsize=16, fontweight='bold')
     
-    # 新しい順序でデータを準備
-    participants = [participant_mapping[p] for p in reordered_participants]
-    medians = [exploration_results[p]['median'] for p in reordered_participants]
-    means = [exploration_results[p]['mean'] for p in reordered_participants]
-    stds = [exploration_results[p]['std'] for p in reordered_participants]
+    participants = list(exploration_results.keys())
+    medians = [exploration_results[p]['median'] for p in participants]
+    means = [exploration_results[p]['mean'] for p in participants]
+    stds = [exploration_results[p]['std'] for p in participants]
     
-    # 信頼区間を計算（95%信頼区間）
-    confidence_intervals = []
-    for p in reordered_participants:
-        trials = exploration_results[p]['trials']
-        # t分布を使用して95%信頼区間を計算
-        ci = stats.t.interval(0.95, len(trials)-1, loc=np.mean(trials), scale=stats.sem(trials))
-        confidence_intervals.append(ci)
+    # 中央値の比較
+    bars1 = ax1.bar(participants, medians, alpha=0.7, color='skyblue')
+    ax1.set_ylabel('Function Mixing Ratio (Median)')
+    ax1.set_title('Exploration Results (Median) by Participant')
+    ax1.grid(True, alpha=0.3)
     
-    # 各被験者の6回の試行結果と中央値
-    colors = ['blue', 'orange', 'green', 'red', 'purple']  # 各被験者に異なる色を割り当て
-    
-    for i, participant in enumerate(reordered_participants):
+    # 各被験者の6回の試行結果
+    for i, participant in enumerate(participants):
         trials = exploration_results[participant]['trials']
         x_positions = [i + 0.1 * (j - 2.5) for j in range(len(trials))]
-        ax_main.scatter(x_positions, trials, alpha=0.6, s=50, color=colors[i], label=participant_mapping[participant])
-        
-        # 中央値を大きな点で表示（各被験者に異なる色）
-        ax_main.scatter(i, medians[i], s=200, marker='o', facecolors='none', edgecolors=colors[i], linewidth=3)
-        
-        # 信頼区間をエラーバーとして表示
-        ci_error = [[medians[i] - confidence_intervals[i][0]], [confidence_intervals[i][1] - medians[i]]]
-        ax_main.errorbar(i, medians[i], yerr=ci_error, fmt='none', color=colors[i], capsize=10, capthick=3, linewidth=2)
-        
-        # 中央値を数値で表示（削除）
-        # ax_main.text(i, medians[i] + 0.05, f'{medians[i]:.3f}', ha='center', va='bottom', fontweight='bold', fontsize=12)
+        ax2.scatter(x_positions, trials, alpha=0.6, s=50, label=participant if i == 0 else "")
+        ax2.axhline(y=medians[i], color='red', linestyle='--', alpha=0.7)
     
-    ax_main.set_xlabel('Participant')
-    ax_main.set_ylabel('Function Mixing Ratio')
-    ax_main.set_xticks(range(len(participants)))
-    ax_main.set_xticklabels(participants)
-    ax_main.legend()
-    ax_main.grid(False)  # グリッドを削除
+    ax2.set_xlabel('Participant')
+    ax2.set_ylabel('Function Mixing Ratio')
+    ax2.set_title('6 Trials and Median per Participant')
+    ax2.set_xticks(range(len(participants)))
+    ax2.set_xticklabels(participants)
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
     
-    # 特定のy値に横線を追加
-    y_lines = [0.0, 0.1, 0.5, 0.9, 1.0]
-    line_colors = ['gray', 'darkblue', 'darkgreen', 'darkred', 'gray']  # 0.0と0.9は灰色、他は濃い色
-    
-    for y_val, color in zip(y_lines, line_colors):
-        ax_main.axhline(y=y_val, color=color, linestyle='-', alpha=0.7, linewidth=1)
-    
-    # 輝度合成図を左側に追加（2つの画像の輝度変化）- 縦軸の左側に配置、横軸の最左端を超えないように
-    # 0.0, 0.5, 1.0の位置に輝度合成図を表示
-    y_positions = [0.0, 0.5, 0.9]  # 0.0, 0.5, 0.9の位置に配置
-    function_names = ['Cosine', 'Linear', 'Acos']  # 順序を変更
-    
-    # 左側の列に3つの関数図を配置
-    for i, (y_pos, func_name) in enumerate(zip(y_positions, function_names)):
-        # 左側の列に小さなサブプロットを作成（幅を小さく、間隔を大きく）
-        ax_inset = fig1.add_axes([0.02, 0.08 + i*0.28, 0.2, 0.12])
-        
-        # 時間軸
-        t = np.linspace(0, 2*np.pi, 100)
-        
-        # 各関数の輝度合成（2つの画像の輝度変化）
-        if func_name == 'Linear':
-            # 線形関数: 画像1は0→1、画像2は1→0
-            luminance1 = t / (2 * np.pi)  # 画像1: 0→1
-            luminance2 = 1 - t / (2 * np.pi)  # 画像2: 1→0
-        elif func_name == 'Cosine':
-            # コサイン関数: 画像1は(1-cos(t))/2、画像2は(1+cos(t))/2
-            luminance1 = (1 - np.cos(t)) / 2  # 画像1: 0→1→0
-            luminance2 = (1 + np.cos(t)) / 2  # 画像2: 1→0→1
-        elif func_name == 'Acos':
-            # アークコサイン関数: 画像1はacos(1-2t/(2π))/π、画像2は1-acos(1-2t/(2π))/π
-            luminance1 = np.arccos(1 - 2 * t / (2 * np.pi)) / np.pi  # 画像1: 0→1
-            luminance2 = 1 - np.arccos(1 - 2 * t / (2 * np.pi)) / np.pi  # 画像2: 1→0
-        
-        # 2つの画像の輝度変化を描画
-        ax_inset.plot(t, luminance1, 'b-', linewidth=1.5, label='Image 1')
-        ax_inset.plot(t, luminance2, 'r-', linewidth=1.5, label='Image 2')
-        ax_inset.set_xlim(0, 2*np.pi)
-        ax_inset.set_ylim(0, 1)
-        ax_inset.set_xticks([0, 2*np.pi])
-        ax_inset.set_xticklabels(['0', 't'])
-        ax_inset.set_yticks([0, 1])
-        ax_inset.set_title(f'{func_name}', fontsize=8)  # "Function"を削除
-        ax_inset.grid(True, alpha=0.3)
-        ax_inset.set_xlabel('t', fontsize=8)
-        ax_inset.set_ylabel('Luminance', fontsize=8)
-        ax_inset.legend(fontsize=6)
-    
-    # 左側の列を非表示にする
-    ax_func.set_visible(False)
+    plt.tight_layout()
+    plt.savefig('experiment2_exploration_results.png', dpi=300, bbox_inches='tight')
+    plt.show()
     
     # 図2: パラメータ調整実験の結果
     fig2, axes = plt.subplots(2, 3, figsize=(18, 12))
@@ -304,7 +227,7 @@ def plot_experiment2_results(exploration_results, phase_params):
     # 被験者ごとの平均パラメータを計算
     avg_params = {}
     
-    for participant in reordered_participants:
+    for participant in participants:
         if participant in phase_params:
             trials = phase_params[participant]
             avg_params[participant] = {}
@@ -318,8 +241,10 @@ def plot_experiment2_results(exploration_results, phase_params):
         row = i // 3
         col = i % 3
         
-        values = [avg_params[p][param] for p in reordered_participants if p in avg_params]
-        participant_list = [participant_mapping[p] for p in reordered_participants if p in avg_params]
+        values = [avg_params[p][param] for p in participants if p in avg_params]
+        participant_list = [p for p in participants if p in avg_params]
+        
+        axes[row, col].bar(participant_list, values, alpha=0.7)
         
         # Special handling for phase parameters (φ1, φ2) - display in π units
         if param in ['φ1', 'φ2']:
@@ -332,7 +257,6 @@ def plot_experiment2_results(exploration_results, phase_params):
         else:
             axes[row, col].set_title(f'{param} Parameter')
             axes[row, col].set_ylabel(param)
-            axes[row, col].bar(participant_list, values, alpha=0.7)
         
         axes[row, col].tick_params(axis='x', rotation=45)
         axes[row, col].grid(True, alpha=0.3)
@@ -343,11 +267,11 @@ def plot_experiment2_results(exploration_results, phase_params):
     # 全被験者の平均パラメータで速度曲線を描画
     if avg_params:
         mean_params = np.array([
-            np.mean([avg_params[p]['V0'] for p in reordered_participants if p in avg_params]),
-            np.mean([avg_params[p]['A1'] for p in reordered_participants if p in avg_params]),
-            np.mean([avg_params[p]['φ1'] for p in reordered_participants if p in avg_params]),
-            np.mean([avg_params[p]['A2'] for p in reordered_participants if p in avg_params]),
-            np.mean([avg_params[p]['φ2'] for p in reordered_participants if p in avg_params])
+            np.mean([avg_params[p]['V0'] for p in participants if p in avg_params]),
+            np.mean([avg_params[p]['A1'] for p in participants if p in avg_params]),
+            np.mean([avg_params[p]['φ1'] for p in participants if p in avg_params]),
+            np.mean([avg_params[p]['A2'] for p in participants if p in avg_params]),
+            np.mean([avg_params[p]['φ2'] for p in participants if p in avg_params])
         ])
         
         v_curve = create_velocity_curve(mean_params, t)
@@ -381,29 +305,19 @@ def compare_experiments(exploration_results, phase_params):
     """実験1と実験2の比較分析"""
     print("\n=== 実験1と実験2の比較分析 ===")
     
-    # 被験者名をA, B, C, D, Eに変更（plot_experiment2_resultsと同じ順序で）
-    original_participants = list(exploration_results.keys())
-    sorted_participants = sorted(original_participants, key=lambda p: exploration_results[p]['median'])
-    group1 = sorted_participants[:3]  # 低い値の3人
-    group2 = sorted_participants[3:]  # 高い値の2人
-    reordered_participants = group1 + group2
-    participant_mapping = {original: new for original, new in zip(reordered_participants, ['A', 'B', 'C', 'D', 'E'])}
-    
     # 実験2の各被験者の代表的なFunctionRatio（中央値）
-    exp2_ratios = {p: exploration_results[p]['median'] for p in reordered_participants}
+    exp2_ratios = {p: exploration_results[p]['median'] for p in exploration_results.keys()}
     
     # 実験2の各被験者の平均V0値
     exp2_v0_values = {}
-    for participant in reordered_participants:
-        if participant in phase_params:
-            trials = phase_params[participant]
-            v0_values = [trials[trial]['V0'] for trial in trials.keys()]
-            exp2_v0_values[participant] = np.mean(v0_values)
+    for participant in phase_params.keys():
+        trials = phase_params[participant]
+        v0_values = [trials[trial]['V0'] for trial in trials.keys()]
+        exp2_v0_values[participant] = np.mean(v0_values)
     
     print("実験2の結果:")
     for participant in exp2_ratios.keys():
-        new_name = participant_mapping[participant]
-        print(f"被験者 {new_name} (元: {participant}): FunctionRatio = {exp2_ratios[participant]:.3f}, 平均V0 = {exp2_v0_values.get(participant, 'N/A'):.3f}")
+        print(f"被験者 {participant}: FunctionRatio = {exp2_ratios[participant]:.3f}, 平均V0 = {exp2_v0_values.get(participant, 'N/A'):.3f}")
     
     # 実験1の実際のデータを読み込む
     print("\n実験1のデータを読み込み中...")
@@ -473,7 +387,6 @@ def compare_experiments(exploration_results, phase_params):
     
     # 実験1と実験2のV0値を比較
     participants = list(exp2_v0_values.keys())
-    participant_names = [participant_mapping[p] for p in participants]
     
     # 実験1の実際のデータを使用（被験者が異なるため、実験1の全被験者の平均値を使用）
     exp1_v0 = []
@@ -499,7 +412,7 @@ def compare_experiments(exploration_results, phase_params):
     ax1.set_ylabel('V0 Value')
     ax1.set_title('Comparison of V0 Value: Exp 1 vs Exp 2')
     ax1.set_xticks(x)
-    ax1.set_xticklabels(participant_names)
+    ax1.set_xticklabels(participants)
     ax1.legend()
     ax1.grid(True, alpha=0.3)
     
@@ -507,7 +420,7 @@ def compare_experiments(exploration_results, phase_params):
     ratios = [exp2_ratios[p] for p in participants]
     ax2.scatter(ratios, exp2_v0, s=100, alpha=0.7, color='green')
     for i, participant in enumerate(participants):
-        ax2.annotate(participant_mapping[participant], (ratios[i], exp2_v0[i]), xytext=(5, 5), textcoords='offset points')
+        ax2.annotate(participant, (ratios[i], exp2_v0[i]), xytext=(5, 5), textcoords='offset points')
     
     ax2.set_xlabel('Function Mixing Ratio (Median of Exploration Phase)')
     ax2.set_ylabel('V0 Value (Parameter Adjustment Phase)')
@@ -598,7 +511,7 @@ This improvement demonstrates the effectiveness of the proposed brightness mixin
 
 def main():
     """メイン関数"""
-    data_dir = "public/BrightnessFunctionMixAndPhaseData"
+    data_dir = "../public/BrightnessFunctionMixAndPhaseData"
     
     # 実験2前半：FunctionMixデータ読み込み
     print("実験2前半：FunctionMixデータを読み込み中...")
