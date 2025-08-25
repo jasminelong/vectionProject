@@ -62,25 +62,28 @@ def calculate_mean_parameters(participant_files):
     return mean_params, all_params
 
 def plot_velocity_curve(V0, A1, φ1, A2, φ2, ax, participant_letter):
-    """绘制速度曲线"""
-    # 时间轴 (2个周期)
-    t = np.linspace(0, 4*np.pi, 1000)
+    """绘制速度曲线，时间轴为秒 [0, 2]（两秒、两周期）"""
+    # 时间轴（秒）：两秒覆盖两周期 → 基本角频率为 2π rad/s
+    t_sec = np.linspace(0.0, 2.0, 1000)
     
-    # 速度函数 - 添加π偏移以匹配实验中的公式
-    # 实验中使用: v(t) = V0 + A1·sin(ωt + φ1 + π) + A2·sin(2ωt + φ2 + π)
-    velocity = V0 + A1 * np.sin(t + φ1 + np.pi) + A2 * np.sin(2*t + φ2 + np.pi)
+    # 速度函数 - 使用秒为单位，sin(2π t) 对应 1 Hz；第二谐波为 sin(4π t)
+    velocity = (
+        V0
+        + A1 * np.sin(2 * np.pi * t_sec + φ1 + np.pi)
+        + A2 * np.sin(4 * np.pi * t_sec + φ2 + np.pi)
+    )
     
     # 绘制曲线
-    ax.plot(t, velocity, 'b-', linewidth=2)
-    ax.set_xlabel(f'Participant {participant_letter}', fontsize=12, fontweight='bold')
+    ax.plot(t_sec, velocity, 'b-', linewidth=2)
+    ax.set_title(f'Participant {participant_letter}', fontsize=12, fontweight='bold')
+    ax.set_xlabel('t(s)')
     ax.set_ylabel('Velocity')
-    # ax.set_title(f'Participant {participant_name} - Mean of 3 Trials')
     ax.grid(True, alpha=0.3)
     
-    # 限制x轴到2个周期
-    ax.set_xlim(0, 4*np.pi)
-    ax.set_xticks([0, np.pi, 2*np.pi, 3*np.pi, 4*np.pi])
-    ax.set_xticklabels(['0', 'π', '2π', '3π', '4π'])
+    # x 轴为 0–2 秒，并标注 0, 0.5, 1, 1.5, 2
+    ax.set_xlim(0.0, 2.0)
+    ax.set_xticks([0.0, 0.5, 1.0, 1.5, 2.0])
+    ax.set_xticklabels(['0', '0.5', '1', '1.5', '2'])
 
 def main():
     # 数据文件夹路径
@@ -154,9 +157,13 @@ def main():
         
         print(f"平均参数: V0={mean_params['V0']:.3f}, A1={mean_params['A1']:.3f}, A2={mean_params['A2']:.3f}")
         
-        # 计算速度范围
-        t = np.linspace(0, 4*np.pi, 1000)
-        velocity = mean_params['V0'] + mean_params['A1'] * np.sin(t + mean_params['φ1'] + np.pi) + mean_params['A2'] * np.sin(2*t + mean_params['φ2'] + np.pi)
+        # 计算速度范围（以秒为横轴的两秒域）
+        t_sec = np.linspace(0.0, 2.0, 1000)
+        velocity = (
+            mean_params['V0']
+            + mean_params['A1'] * np.sin(2 * np.pi * t_sec + mean_params['φ1'] + np.pi)
+            + mean_params['A2'] * np.sin(4 * np.pi * t_sec + mean_params['φ2'] + np.pi)
+        )
         all_velocities.extend(velocity)
     
     # 计算统一的y轴范围
