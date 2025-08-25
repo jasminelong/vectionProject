@@ -35,7 +35,7 @@ t = np.linspace(0, 10, 2000)
 
 # ========== 4. 读取亮度数据并修正 ==========
 time = df["Time"] / 1000
-mask = (time <= 10) & (df["BackFrameNum"] % 2 != 0)
+mask = (time <= 2) & (df["BackFrameNum"] % 2 != 0)
 df.loc[mask, ["BackFrameNum", "FrondFrameNum"]] = df.loc[mask, ["FrondFrameNum", "BackFrameNum"]].to_numpy()
 df.loc[mask, ["BackFrameLuminance", "FrondFrameLuminance"]] = df.loc[mask, ["FrondFrameLuminance", "BackFrameLuminance"]].to_numpy()
 

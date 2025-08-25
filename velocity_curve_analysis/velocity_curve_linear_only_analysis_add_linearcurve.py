@@ -21,6 +21,11 @@ except Exception:
 # 设置中文字体
 plt.rcParams['font.sans-serif'] = ['SimHei', 'DejaVu Sans']
 plt.rcParams['axes.unicode_minus'] = False
+# 保存与绘图背景改为白色
+plt.rcParams['savefig.facecolor'] = 'white'
+plt.rcParams['savefig.edgecolor'] = 'white'
+plt.rcParams['figure.facecolor'] = 'white'
+plt.rcParams['axes.facecolor'] = 'white'
 
 def extract_parameters(df):
     """从数据中提取速度参数"""
@@ -147,19 +152,40 @@ def main():
     
     print(f"选择的参与者顺序: {selected_participants}")
     
-    # 创建子图 - 改为一行5列
-    fig, axes = plt.subplots(1, 5, figsize=(20, 4))
-    # 透明背景设置
+    # 创建子图 - 改为一行6列（第一个为任意一个Linear样本，其余5个为均值）
+    fig, axes = plt.subplots(1, 6, figsize=(24, 4))
     try:
-        fig.patch.set_alpha(0.0)
+        fig.patch.set_facecolor('white')
+        fig.patch.set_alpha(1.0)
         for ax in axes:
-            ax.set_facecolor('none')
+            ax.set_facecolor('white')
+            ax.patch.set_alpha(1.0)
     except Exception:
         pass
     
-    # 先计算所有参与者的参数，以确定y轴范围
+    # 先计算所有参与者的参数，以确定y轴范围；并准备一个样本亮度曲线
     all_velocities = []
     participant_results = {}
+
+    # 添加一个线性样本（任取一个 LinearOnly 文件），绘制亮度随时间（0-2s）
+    sample_file = linear_only_files[0]
+    try:
+        sample_df = pd.read_csv(sample_file)
+        sample_df.columns = sample_df.columns.str.strip()
+        time_sec = sample_df["Time"] / 1000.0
+        # 在前2秒内：当 BackFrameNum 为奇数时，交换 Back/Frond 的辉度值
+        if "BackFrameLuminance" in sample_df.columns and "FrondFrameLuminance" in sample_df.columns and "BackFrameNum" in sample_df.columns:
+            mask_swap = (time_sec <= 2.0) & (sample_df["BackFrameNum"] % 2 != 0)
+            sample_df.loc[mask_swap, ["BackFrameLuminance", "FrondFrameLuminance"]] = sample_df.loc[mask_swap, ["FrondFrameLuminance", "BackFrameLuminance"]].to_numpy()
+        # 仅取 0-2 秒数据
+        mask_2s = time_sec <= 2.0
+        t_sec_sample = time_sec[mask_2s]
+        frond_lum = sample_df.loc[mask_2s, "FrondFrameLuminance"] if "FrondFrameLuminance" in sample_df.columns else None
+        back_lum = sample_df.loc[mask_2s, "BackFrameLuminance"] if "BackFrameLuminance" in sample_df.columns else None
+        sample_ok = frond_lum is not None and back_lum is not None
+    except Exception as e:
+        print(f"样本文件读取失败: {sample_file.name}，错误: {e}")
+        sample_ok = False
     
     for i, participant in enumerate(selected_participants):
         if i >= 5:  # 只处理前5个参与者
@@ -196,7 +222,23 @@ def main():
     y_min = min(all_velocities) - 0.1
     y_max = max(all_velocities) + 0.1
     
-    # 绘制所有参与者的速度曲线
+    # 先绘制样本亮度曲线在第一个子图
+    if sample_ok:
+        axes[0].plot(t_sec_sample, frond_lum, label="Left Frame", alpha=0.8)
+        axes[0].plot(t_sec_sample, back_lum, label="Right Frame", alpha=0.8)
+        axes[0].set_title('Luminance sample', fontsize=12, fontweight='bold')
+        axes[0].set_xlabel('t(s)')
+        axes[0].set_ylabel('Luminance (0-1)')
+        axes[0].grid(True, alpha=0.3)
+        axes[0].set_xlim(0.0, 2.0)
+        axes[0].set_xticks([0.0, 0.5, 1.0, 1.5, 2.0])
+        axes[0].set_xticklabels(['0', '0.5', '1', '1.5', '2'])
+        axes[0].set_ylim(0.0, 1.0)
+        leg = axes[0].legend(loc='best', frameon=False)
+    else:
+        axes[0].set_visible(False)
+
+    # 然后绘制5个参与者均值曲线在后五个子图
     for i, participant in enumerate(selected_participants):
         if i >= 5 or participant not in participant_results:
             continue
@@ -207,20 +249,20 @@ def main():
         fill_color = '#1f77b4' if i < 3 else '#ffeb3b'
         plot_velocity_curve(
             mean_params['V0'], mean_params['A1'], mean_params['φ1'], 
-            mean_params['A2'], mean_params['φ2'], axes[i], chr(65 + i), fill_color
+            mean_params['A2'], mean_params['φ2'], axes[i + 1], chr(65 + i), fill_color
         )
         
         # 设置统一的y轴范围
-        axes[i].set_ylim(y_min, y_max)
+        axes[i + 1].set_ylim(y_min, y_max)
     
     plt.tight_layout()
-    plt.savefig('velocity_curves_linear_only_mean.png', dpi=300, bbox_inches='tight', transparent=True)
+    plt.savefig('velocity_curves_linear_only_mean_add_linearcurve.png', dpi=300, bbox_inches='tight')
     try:
         plt.show()
     except Exception:
         pass
     
-    print("\n速度曲线图已保存为 velocity_curves_linear_only_mean.png")
+    print("\n速度曲线图已保存为 velocity_curves_linear_only_mean_add_linearcurve.png")
 
 if __name__ == "__main__":
     main() 
