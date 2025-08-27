@@ -42,23 +42,23 @@ def main() -> None:
     xticks = [0.0, 0.5, 1.0, 1.5, 2.0]
     xtick_labels = ['0', '0.5', '1', '1.5', '2']
 
-    # Plot 1: 0.5 * (1 - cos(pi * x)) and its complement (same color)
-    axes[0].plot(t, y_cos, linewidth=2.0, color=color_f1)
-    axes[0].plot(t, 1.0 - y_cos, linewidth=2.0, color=color_f1, alpha=0.9)
+    # Plot 3: arccos(-2x + 1) / pi (per period) and its complement (same color)
+    axes[0].plot(t, y_arccos, linewidth=2.0, color=color_f3)
+    axes[0].plot(t, 1.0 - y_arccos, linewidth=2.0, color=color_f3, alpha=0.9)
     axes[0].set_xlim(0.0, 2.0)
     axes[0].set_ylim(0.0, 1.0)
     axes[0].set_xlabel('t(s)')
     axes[0].set_xticks(xticks, xtick_labels)
     axes[0].set_yticks([0.0, 1.0], ['0', '1'])
     axes[0].grid(True, alpha=0.3)
-    axes[0].set_title(r"$y = 0.5\,(1 - \cos(\pi t))$")
+    axes[0].set_title(r"$y = \arccos(-2t + 1)/\pi$")
     # axes[0].legend(loc='best')
 
     # Plot 2: y = x (per period) and its complement (same color)
     axes[1].plot(t, y_linear, linewidth=2.0, color=color_f2)
     axes[1].plot(t, 1.0 - y_linear, linewidth=2.0, color=color_f2, alpha=0.9)
     axes[1].set_xlim(0.0, 2.0)
-    axes[1].t_ylim(0.0, 1.0)
+    axes[1].set_ylim(0.0, 1.0)
     axes[1].set_xlabel('t(s)')
     axes[1].set_xticks(xticks, xtick_labels)
     axes[1].set_yticks([0.0, 1.0], ['0', '1'])
@@ -66,17 +66,18 @@ def main() -> None:
     axes[1].set_title(r"$y = t$")
     # axes[1].legend(loc='best')
 
-    # Plot 3: arccos(-2x + 1) / pi (per period) and its complement (same color)
-    axes[2].plot(t, y_arccos, linewidth=2.0, color=color_f3)
-    axes[2].plot(t, 1.0 - y_arccos, linewidth=2.0, color=color_f3, alpha=0.9)
-    axes[2].set_xm(0.0, 2.0)
+
+    # Plot 1: 0.5 * (1 - cos(pi * x)) and its complement (same color)
+    axes[2].plot(t, y_cos, linewidth=2.0, color=color_f1)
+    axes[2].plot(t, 1.0 - y_cos, linewidth=2.0, color=color_f1, alpha=0.9)
+    axes[2].set_xlim(0.0, 2.0)
     axes[2].set_ylim(0.0, 1.0)
     axes[2].set_xlabel('t(s)')
     axes[2].set_xticks(xticks, xtick_labels)
     axes[2].set_yticks([0.0, 1.0], ['0', '1'])
     axes[2].grid(True, alpha=0.3)
-    axes[2].set_title(r"$y = \arccos(-2t + 1)/\pi$")
-    # axes[2].legend(loc='best')
+    axes[2].set_title(r"$y = 0.5\,(1 - \cos(\pi t))$")
+    # axes[0].legend(loc='best')
 
     plt.tight_layout()
 
@@ -92,3 +93,10 @@ def main() -> None:
 
 if __name__ == '__main__':
     main() 
+
+
+
+
+
+
+
